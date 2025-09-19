@@ -1,4 +1,3 @@
-// App.jsx — Portfólio cinematográfico (sem build, usando React UMD + Tailwind CDN)
 const { useMemo, useState } = React;
 
 function App() {
@@ -103,12 +102,14 @@ function Header() {
 
 function Logo() {
   return (
-    <a href="#top" className="group inline-flex items-center gap-2 select-none">
+    <a href="#top" className="group inline-flex items-center gap-5 select-none">
       <div className="relative">
         <span className="text-2xl font-extrabold tracking-tight leading-none">R</span>
         <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
       </div>
-      <span className="text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">Rodrigues Studio</span>
+      <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
+        Rodrigues Studio
+      </span>
     </a>
   );
 }
@@ -128,7 +129,7 @@ function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-            Cinema para marcas que querem <span className="text-red-500">resultado</span>.
+            Cinema para empresas que querem <span className="text-red-500">resultado</span>.
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/80">
             Produção e edição de vídeos com linguagem cinematográfica para campanhas, institucionais e social media.
@@ -141,7 +142,7 @@ function Hero() {
               Ver portfólio
             </a>
             <a
-              href="https://wa.me/5541999999999"
+              href="https://wa.me/5541999592689"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400 transition-colors"
@@ -161,7 +162,7 @@ function BrandsStrip() {
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center gap-x-12 gap-y-4 justify-center text-white/50 text-xs uppercase tracking-widest">
         <span className="opacity-70">Clientes & Parceiros</span>
         <span className="px-3 py-1 rounded-full border border-white/10">Clínicas</span>
-        <span className="px-3 py-1 rounded-full border border-white/10">Educação</span>
+        <span className="px-3 py-1 rounded-full border border-white/10">YouTubers</span>
         <span className="px-3 py-1 rounded-full border border-white/10">Startups</span>
         <span className="px-3 py-1 rounded-full border border-white/10">Saúde & Estética</span>
         <span className="px-3 py-1 rounded-full border border-white/10">Comércio Local</span>
@@ -177,7 +178,7 @@ function Services() {
       title: "Produção Institucional",
       desc:
         "Roteiro, gravação e direção de cenas com estética cinematográfica para vídeos institucionais e corporativos.",
-      bullets: ["Planejamento criativo", "Captação em 4K", "Entrega color grade"],
+      bullets: ["Planejamento criativo", "Captação em alta resolução", "Entrega color grade"],
     },
     {
       icon: "✂️",
@@ -226,10 +227,11 @@ function Services() {
 
 function Portfolio({ category, setCategory, items }) {
   const tabs = [
-    { key: "todos", label: "Todos" },
-    { key: "institucional", label: "Institucional" },
-    { key: "comercial", label: "Comercial" },
-    { key: "social", label: "Social" },
+  { key: "todos", label: "Todos" },
+  { key: "institucional", label: "Institucional" },
+  { key: "comercial", label: "Comercial" },
+  { key: "youtube", label: "YouTube" },
+  { key: "cinematico", label: "Cinemático" },
   ];
 
   return (
@@ -289,13 +291,13 @@ function Portfolio({ category, setCategory, items }) {
 function Testimonials() {
   const quotes = [
     {
-      name: "Mariana S.",
-      role: "Diretora — Clínica Lumi",
+      name: "Leo Ritchie",
+      role: "Youtuber - Estafera",
       text:
-        "O filme institucional elevou nossa marca. Passamos a receber clientes comentando diretamente sobre o vídeo.",
+        "Grande Carlão, melhorou a qualidade dos meus vídeos e trouxe mais engajamento no meu canal. Esse cara é nota 10!",
     },
     {
-      name: "Eduardo R.",
+      name: "teste",
       role: "CMO — Startup Health",
       text:
         "Carlos entende de narrativa e de negócio. O corte para ads aumentou o CTR e reduziu o CPA.",
@@ -337,11 +339,11 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Studio é dirigido por <span className="text-white">Carlos Rodrigues</span>, produtor e editor com 7 anos de experiência
-            em linguagem cinematográfica para marcas. Meu foco é unir estética, estratégia e performance.
+            Rodrigues Studio é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Captação e edição 4K</li>
+            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Captação e edição alta resolução</li>
             <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Motion e color grading</li>
             <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Formatos para redes</li>
             <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Roteiro e direção</li>
@@ -374,7 +376,7 @@ function Contact() {
             <p className="mt-3 text-white/80">Conte em poucas linhas o que você precisa e eu retorno com orçamento e prazos.</p>
             <div className="mt-6 grid grid-cols-2 gap-3">
               <a
-                href="https://wa.me/5541999999999"
+                href="https://wa.me/5541999592689"
                 target="_blank"
                 rel="noreferrer"
                 className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-4 py-3 text-center font-semibold"
@@ -382,7 +384,7 @@ function Contact() {
                 WhatsApp
               </a>
               <a
-                href="mailto:carlos@rodrigues.studio"
+                href="mailto:C.rodrigues.edu@gmail.com"
                 className="rounded-xl border border-white/20 hover:border-red-500/60 transition-colors px-4 py-3 text-center font-semibold"
               >
                 E-mail

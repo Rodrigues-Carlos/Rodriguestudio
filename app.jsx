@@ -357,7 +357,7 @@ function Contact() {
       <div className="rounded-3xl border border-white/10 overflow-hidden">
         <div className="p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
           <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
-          <p className="mt-3 text-white/80">Fale comigo no WhatsApp (mensagem pronta).</p>
+          <p className="mt-3 text-white/80">Fale comigo no WhatsApp.</p>
 
           <div className="mt-6">
             <a

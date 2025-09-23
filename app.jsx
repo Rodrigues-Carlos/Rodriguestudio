@@ -7,51 +7,35 @@ function App() {
     () => [
       {
         id: 1,
-        title: "Clínica Estética — Institucional",
+        title: "Pacientes — Institucional",
         cat: "institucional",
         thumb:
-          "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
+          "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-video",
       },
       {
         id: 2,
-        title: "Série Social — Reels",
-        cat: "social",
+        title: "ESTAFERA — Youtube",
+        cat: "entretenimento",
         thumb:
-          "https://images.unsplash.com/photo-1505238680356-667803448bb6?q=80&w=1600&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-[4/5]",
       },
       {
         id: 3,
-        title: "Produto — Comercial",
-        cat: "comercial",
+        title: "Carro - Cinemático",
+        cat: "cinemático",
         thumb:
-          "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop",
+          "https://www.youtube.com/watch?v=BPAbjeK8yoY",
         ratio: "aspect-square",
       },
       {
         id: 4,
-        title: "Treinamento — Corporativo",
-        cat: "institucional",
+        title: "Moto — Cinemático",
+        cat: "cinematico",
         thumb:
-          "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?q=80&w=1600&auto=format&fit=crop",
+          "https://www.youtube.com/watch?v=eGM58NmU3oM",
         ratio: "aspect-[21/9]",
-      },
-      {
-        id: 5,
-        title: "Campanha — Comercial",
-        cat: "comercial",
-        thumb:
-          "https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-[3/4]",
-      },
-      {
-        id: 6,
-        title: "Making of — Social",
-        cat: "social",
-        thumb:
-          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-video",
       },
     ],
     []
@@ -230,7 +214,7 @@ function Portfolio({ category, setCategory, items }) {
   { key: "todos", label: "Todos" },
   { key: "institucional", label: "Institucional" },
   { key: "comercial", label: "Comercial" },
-  { key: "youtube", label: "YouTube" },
+  { key: "entretenimento", label: "Entretenimento" },
   { key: "cinematico", label: "Cinemático" },
   ];
 
@@ -297,16 +281,16 @@ function Testimonials() {
         "Grande Carlão, melhorou a qualidade dos meus vídeos e trouxe mais engajamento no meu canal. Esse cara é nota 10!",
     },
     {
-      name: "teste",
-      role: "CMO — Startup Health",
+      name: "Investmoney",
+      role: "Securitizadora - Startup",
       text:
-        "Carlos entende de narrativa e de negócio. O corte para ads aumentou o CTR e reduziu o CPA.",
+        "+600% de engajamento nas redes sociais com estratégias direcionadas e foco em qualidade, comprovando a eficiência de conteúdo que converte.",
     },
     {
-      name: "Paula G.",
-      role: "Produtora Executiva",
+      name: "Gabriela - Fundadora Octacore",
+      role: "Octacore - AAACPUCPR",
       text:
-        "Entrega fina, estética e no prazo. Virou parceiro recorrente em nossos jobs.",
+        "Gestor impecável, sempre realizou entregas dentro do prazo e com alta qualidade. Vestiu a camisa da atlética e elevou o nível da propaganda.",
     },
   ];
 
@@ -367,64 +351,40 @@ function About() {
 }
 
 function Contact() {
+  const wa = "5541999592689";
+  const msg = encodeURIComponent(
+    "Olá, Carlos! Vi seu portfólio e quero um orçamento.\n" +
+    "Projeto: [institucional/comercial/youtube/cinemático]\n" +
+    "Prazo: [data]\n" +
+    "Budget: [R$]\n" +
+    "Mensagem: [objetivo em 1 frase]"
+  );
+
   return (
     <section id="contato" className="max-w-7xl mx-auto px-6 py-20">
       <div className="rounded-3xl border border-white/10 overflow-hidden">
-        <div className="grid md:grid-cols-2">
-          <div className="relative p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
-            <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
-            <p className="mt-3 text-white/80">Conte em poucas linhas o que você precisa e eu retorno com orçamento e prazos.</p>
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <a
-                href="https://wa.me/5541999592689"
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-4 py-3 text-center font-semibold"
-              >
-                WhatsApp
-              </a>
-              <a
-                href="mailto:C.rodrigues.edu@gmail.com"
-                className="rounded-xl border border-white/20 hover:border-red-500/60 transition-colors px-4 py-3 text-center font-semibold"
-              >
-                E-mail
-              </a>
-            </div>
-          </div>
-          <div className="p-8 md:p-12 border-t md:border-t-0 md:border-l border-white/10">
-            <form className="grid gap-4">
-              <div>
-                <label className="text-xs uppercase tracking-widest text-white/60">Nome</label>
-                <input
-                  type="text"
-                  placeholder="Seu nome"
-                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-red-500"
-                />
-              </div>
-              <div>
-                <label className="text-xs uppercase tracking-widest text-white/60">E-mail</label>
-                <input
-                  type="email"
-                  placeholder="voce@email.com"
-                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-red-500"
-                />
-              </div>
-              <div>
-                <label className="text-xs uppercase tracking-widest text-white/60">Mensagem</label>
-                <textarea
-                  rows={4}
-                  placeholder="Conte sobre o projeto, objetivos e prazos."
-                  className="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 outline-none focus:border-red-500"
-                />
-              </div>
-              <button
-                type="button"
-                className="rounded-xl bg-white text-black hover:bg-red-500 hover:text-white transition-colors px-4 py-3 font-semibold"
-                title="Demonstração — integrar via formulário real no deploy"
-              >
-                Enviar mensagem
-              </button>
-            </form>
+        <div className="p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
+          <p className="mt-3 text-white/80">
+            Fale comigo no WhatsApp (mensagem já pronta) ou envie um e-mail.
+          </p>
+
+          <div className="mt-6 grid sm:grid-cols-2 gap-3">
+            <a
+              href={`https://wa.me/${wa}?text=${msg}`}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-4 py-3 text-center font-semibold"
+            >
+              Abrir WhatsApp com mensagem
+            </a>
+
+            <a
+              href="mailto:Studio.rodr@gmail.com?subject=Orçamento%20—%20Rodrigues%20Studio&body=Olá%2C%20Carlos!%20Quero%20um%20orçamento.%0AProjeto%3A%20%5Binstitucional%2Fcomercial%2Fyoutube%2Fcinem%C3%A1tico%5D%0APrazo%3A%20%5Bdata%5D%0ABudget%3A%20%5BR%24%5D%0AMensagem%3A%20%5Bobjetivo%20em%201%20frase%5D"
+              className="rounded-xl border border-white/20 hover:border-red-500/60 transition-colors px-4 py-3 text-center font-semibold"
+            >
+              Enviar e-mail
+            </a>
           </div>
         </div>
       </div>

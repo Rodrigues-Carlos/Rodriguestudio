@@ -53,7 +53,7 @@ function App() {
       <Testimonials />
       <About />
       <Contact />
-      <Footer />
+    // <Footer />
     </div>
   );
 }

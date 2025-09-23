@@ -6,10 +6,10 @@ function App() {
   const projects = useMemo(() => [
   {
     id: 1,
-    title: "Pacientes — Institucional",
-    cat: "institucional",
+    title: "Carro — Cinemático",
+    cat: "cinematico",
     thumb: "https://img.youtube.com/vi/ID_INSTITUCIONAL/hqdefault.jpg",
-    url: "https://www.youtube.com/watch?v=ID_INSTITUCIONAL",
+    url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
     ratio: "aspect-video",
   },
   {
@@ -22,19 +22,19 @@ function App() {
   },
   {
     id: 3,
-    title: "Carro — Cinemático",
+    title: "Moto — Cinemático",
     cat: "cinematico",
     thumb: "https://img.youtube.com/vi/ID_CINEMATICO/hqdefault.jpg",
-    url: "https://www.youtube.com/watch?v=ID_CINEMATICO",
+    url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
     ratio: "aspect-video",
   },
   {
     id: 4,
-    title: "Moto — Cinemático (Instagram)",
-    cat: "cinematico",
-    thumb: "/thumbs/moto-insta.jpg",        // suba uma imagem no repositório
-    url: "https://www.instagram.com/p/SEU_POST/",
-    ratio: "aspect-[9/16]",                 // vertical
+    title: "Quiz estética — Institucional",
+    cat: "institucional",
+    thumb: "thumbs/moto-insta.jpg",
+    url: "https://www.instagram.com",
+    ratio: "aspect-[9/16]",
   },
 ], []);
 

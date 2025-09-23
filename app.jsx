@@ -3,43 +3,40 @@ const { useMemo, useState } = React;
 function App() {
   const [category, setCategory] = useState("todos");
 
-  const projects = useMemo(
-    () => [
-      {
-        id: 1,
-        title: "Pacientes — Institucional",
-        cat: "institucional",
-        thumb: "",
-        url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-[9/16]",
-      },
-      {
-        id: 2,
-        title: "ESTAFERA — Youtube",
-        cat: "entretenimento",
-        thumb: "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop.jpg",
-        url: "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-video",
-      },
-      {
-        id: 3,
-        title: "Carro - Cinemático",
-        cat: "cinemático",
-         thumb: "https://www.youtube.com/watch?v=BPAbjeK8yoY.jpg",
-        url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
-        ratio: "aspect-video",
-      },
-      {
-        id: 4,
-        title: "Moto — Cinemático",
-        cat: "cinematico",
-        thumb: "https://www.youtube.com/watch?v=eGM58NmU3oM.jpg",
-        url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
-        ratio: "aspect-video",
-      },
-    ],
-    []
-  );
+  const projects = useMemo(() => [
+  {
+    id: 1,
+    title: "Pacientes — Institucional",
+    cat: "institucional",
+    thumb: "https://img.youtube.com/vi/ID_INSTITUCIONAL/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=ID_INSTITUCIONAL",
+    ratio: "aspect-video",
+  },
+  {
+    id: 2,
+    title: "ESTAFERA — YouTube",
+    cat: "youtube",
+    thumb: "https://img.youtube.com/vi/ID_YOUTUBE/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=ID_YOUTUBE",
+    ratio: "aspect-video",
+  },
+  {
+    id: 3,
+    title: "Carro — Cinemático",
+    cat: "cinematico",
+    thumb: "https://img.youtube.com/vi/ID_CINEMATICO/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=ID_CINEMATICO",
+    ratio: "aspect-video",
+  },
+  {
+    id: 4,
+    title: "Moto — Cinemático (Instagram)",
+    cat: "cinematico",
+    thumb: "/thumbs/moto-insta.jpg",        // suba uma imagem no repositório
+    url: "https://www.instagram.com/p/SEU_POST/",
+    ratio: "aspect-[9/16]",                 // vertical
+  },
+], []);
 
   const filtered = useMemo(
     () => (category === "todos" ? projects : projects.filter((p) => p.cat === category)),
@@ -61,40 +58,54 @@ function App() {
   );
 }
 
-function Header() {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Logo />
-        <nav className="hidden md:flex items-center gap-8 text-sm">
-          <a href="#servicos" className="hover:text-red-500 transition-colors">Serviços</a>
-          <a href="#portfolio" className="hover:text-red-500 transition-colors">Portfólio</a>
-          <a href="#depoimentos" className="hover:text-red-500 transition-colors">Depoimentos</a>
-          <a href="#sobre" className="hover:text-red-500 transition-colors">Sobre</a>
-          <a href="#contato" className="hover:text-red-500 transition-colors">Contato</a>
-        </nav>
-        <a
-          href="#contato"
-          className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-500 transition-colors"
-        >
-          Orçar projeto
-        </a>
-      </div>
-    </header>
-  );
-}
-
 function Logo() {
   return (
     <a href="#top" className="group inline-flex items-center gap-5 select-none">
       <div className="relative">
-        <span className="text-2xl font-extrabold tracking-tight leading-none">R</span>
+        <span className="text-2xl font-extrabold leading-none">R</span>
         <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
       </div>
       <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
         Rodrigues Studio
       </span>
     </a>
+  );
+}
+
+function Header() {
+  const wa = "5541999592689";
+  const msg = encodeURIComponent(
+    "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
+  );
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Logo />
+        <nav className="hidden md:flex items-center gap-8 text-sm">
+          <a href="#servicos" className="hover:text-red-500 transition-colors">Serviços</a>
+          <a href="#portfolio" className="hover:text-red-500 transition-colors">Destaques</a>
+          <a href="#sobre" className="hover:text-red-500 transition-colors">Sobre</a>
+          <a href="#contato" className="hover:text-red-500 transition-colors">Contato</a>
+        </nav>
+        <div className="flex items-center gap-3">
+          <a
+            href="#portfolio"
+            className="rounded-full bg-white text-black px-6 py-3 text-sm font-semibold whitespace-nowrap shadow-lg shadow-black/30 hover:bg-red-500 hover:text-white hover:shadow-red-500/40 transition-all"
+          >
+            Ver portfólio
+          </a>
+          <a
+            href={`https://wa.me/${wa}?text=${msg}`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full px-6 py-3 text-sm font-semibold whitespace-nowrap border border-white/30 bg-white/5 backdrop-blur-[2px] text-white shadow-lg shadow-black/30 hover:bg-white/10 hover:border-red-500 hover:shadow-red-500/30 transition-all"
+          >
+            Falar no WhatsApp
+          </a>
+        </div>
+      </div>
+    </header>
   );
 }
 
@@ -213,10 +224,9 @@ function Portfolio({ category, setCategory, items }) {
   const tabs = [
   { key: "todos", label: "Todos" },
   { key: "institucional", label: "Institucional" },
-  { key: "comercial", label: "Comercial" },
-  { key: "entretenimento", label: "Entretenimento" },
+  { key: "youtube", label: "YouTube" },
   { key: "cinematico", label: "Cinemático" },
-  ];
+];
 
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
@@ -245,27 +255,29 @@ function Portfolio({ category, setCategory, items }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((p) => (
           <article key={p.id} className="group">
-            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5` }>
-              <img
-                src={p.thumb}
-                alt={p.title}
-                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute inset-0 flex items-end p-4">
-                <div>
-                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-                  </div>
-                  <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
-                </div>
-              </div>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
-              </div>
-            </div>
-          </article>
+  <a href={p.url} target="_blank" rel="noreferrer" className="block">
+    <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+      <img
+        src={p.thumb}
+        alt={p.title}
+        className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      <div className="absolute inset-0 flex items-end p-4">
+        <div>
+          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+            <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+          </div>
+          <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
+        </div>
+      </div>
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
+      </div>
+    </div>
+  </a>
+</article>
         ))}
       </div>
     </section>
@@ -323,7 +335,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Studio é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            Rodrigues Studio é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 7 anos de experiência
             em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">

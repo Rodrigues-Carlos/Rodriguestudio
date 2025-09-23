@@ -3,40 +3,39 @@ const { useMemo, useState } = React;
 function App() {
   const [category, setCategory] = useState("todos");
 
-  const projects = useMemo(() => [
-  {
-    id: 1,
-    title: "Carro — Cinemático",
-    cat: "cinematico",
-    thumb: "https://img.youtube.com/vi/ID_INSTITUCIONAL/hqdefault.jpg",
-    url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
-    ratio: "aspect-video",
-  },
-  {
-    id: 2,
-    title: "ESTAFERA — YouTube",
-    cat: "youtube",
-    thumb: "https://img.youtube.com/vi/ID_YOUTUBE/hqdefault.jpg",
-    url: "https://www.youtube.com/watch?v=ID_YOUTUBE",
-    ratio: "aspect-video",
-  },
-  {
-    id: 3,
-    title: "Moto — Cinemático",
-    cat: "cinematico",
-    thumb: "https://img.youtube.com/vi/ID_CINEMATICO/hqdefault.jpg",
-    url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
-    ratio: "aspect-video",
-  },
-  {
-    id: 4,
-    title: "Quiz estética — Institucional",
-    cat: "institucional",
-    thumb: "thumbs/moto-insta.jpg",
-    url: "https://www.instagram.com",
-    ratio: "aspect-[9/16]",
-  },
-], []);
+  const projects = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Pacientes — Institucional",
+        cat: "institucional",
+        url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
+        ratio: "aspect-video",
+      },
+      {
+        id: 2,
+        title: "ESTAFERA — Youtube",
+        cat: "entretenimento",
+        url: "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
+        ratio: "aspect-[4/5]",
+      },
+      {
+        id: 3,
+        title: "Carro - Cinemático",
+        cat: "cinemático",
+        url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
+        ratio: "aspect-square",
+      },
+      {
+        id: 4,
+        title: "Moto — Cinemático",
+        cat: "cinematico",
+        url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
+        ratio: "aspect-[21/9]",
+      },
+    ],
+    []
+  );
 
   const filtered = useMemo(
     () => (category === "todos" ? projects : projects.filter((p) => p.cat === category)),
@@ -53,8 +52,31 @@ function App() {
       <Testimonials />
       <About />
       <Contact />
-    // <Footer />
+      <Footer />
     </div>
+  );
+}
+
+function Header() {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Logo />
+        <nav className="hidden md:flex items-center gap-8 text-sm">
+          <a href="#servicos" className="hover:text-red-500 transition-colors">Serviços</a>
+          <a href="#portfolio" className="hover:text-red-500 transition-colors">Portfólio</a>
+          <a href="#depoimentos" className="hover:text-red-500 transition-colors">Depoimentos</a>
+          <a href="#sobre" className="hover:text-red-500 transition-colors">Sobre</a>
+          <a href="#contato" className="hover:text-red-500 transition-colors">Contato</a>
+        </nav>
+        <a
+          href="#contato"
+          className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-500 transition-colors"
+        >
+          Orçar projeto
+        </a>
+      </div>
+    </header>
   );
 }
 
@@ -62,50 +84,13 @@ function Logo() {
   return (
     <a href="#top" className="group inline-flex items-center gap-5 select-none">
       <div className="relative">
-        <span className="text-2xl font-extrabold leading-none">R</span>
+        <span className="text-2xl font-extrabold tracking-tight leading-none">R</span>
         <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
       </div>
       <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
         Rodrigues Studio
       </span>
     </a>
-  );
-}
-
-function Header() {
-  const wa = "5541999592689";
-  const msg = encodeURIComponent(
-    "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
-  );
-
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Logo />
-        <nav className="hidden md:flex items-center gap-8 text-sm">
-          <a href="#servicos" className="hover:text-red-500 transition-colors">Serviços</a>
-          <a href="#portfolio" className="hover:text-red-500 transition-colors">Destaques</a>
-          <a href="#sobre" className="hover:text-red-500 transition-colors">Sobre</a>
-          <a href="#contato" className="hover:text-red-500 transition-colors">Contato</a>
-        </nav>
-        <div className="flex items-center gap-3">
-          <a
-            href="#portfolio"
-            className="rounded-full bg-white text-black px-6 py-3 text-sm font-semibold whitespace-nowrap shadow-lg shadow-black/30 hover:bg-red-500 hover:text-white hover:shadow-red-500/40 transition-all"
-          >
-            Ver portfólio
-          </a>
-          <a
-            href={`https://wa.me/${wa}?text=${msg}`}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full px-6 py-3 text-sm font-semibold whitespace-nowrap border border-white/30 bg-white/5 backdrop-blur-[2px] text-white shadow-lg shadow-black/30 hover:bg-white/10 hover:border-red-500 hover:shadow-red-500/30 transition-all"
-          >
-            Falar no WhatsApp
-          </a>
-        </div>
-      </div>
-    </header>
   );
 }
 
@@ -124,11 +109,27 @@ function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-            Cinema para marcas que querem <span className="text-red-500">resultado</span>.
+            Cinema para empresas que querem <span className="text-red-500">resultado</span>.
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/80">
-            Produção e edição de vídeos com linguagem cinematográfica.
+            Produção e edição de vídeos com linguagem cinematográfica para campanhas, institucionais e social media.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#portfolio"
+              className="rounded-full bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
+            >
+              Ver portfólio
+            </a>
+            <a
+              href="https://wa.me/5541999592689"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400 transition-colors"
+            >
+              Falar no WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -208,9 +209,10 @@ function Portfolio({ category, setCategory, items }) {
   const tabs = [
   { key: "todos", label: "Todos" },
   { key: "institucional", label: "Institucional" },
-  { key: "youtube", label: "YouTube" },
+  { key: "comercial", label: "Comercial" },
+  { key: "entretenimento", label: "Entretenimento" },
   { key: "cinematico", label: "Cinemático" },
-];
+  ];
 
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
@@ -239,29 +241,27 @@ function Portfolio({ category, setCategory, items }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((p) => (
           <article key={p.id} className="group">
-  <a href={p.url} target="_blank" rel="noreferrer" className="block">
-    <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-      <img
-        src={p.thumb}
-        alt={p.title}
-        className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-        loading="lazy"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-      <div className="absolute inset-0 flex items-end p-4">
-        <div>
-          <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-            <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-          </div>
-          <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
-        </div>
-      </div>
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-        <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
-      </div>
-    </div>
-  </a>
-</article>
+            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5` }>
+              <img
+                src={p.thumb}
+                alt={p.title}
+                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex items-end p-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                  </div>
+                  <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
     </section>
@@ -319,7 +319,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Studio é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            Rodrigues Studio é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
             em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
@@ -354,45 +354,43 @@ function Contact() {
 
   return (
     <section id="contato" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-8 md:p-12">
-        <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
+      <div className="rounded-3xl border border-white/10 overflow-hidden">
+        <div className="p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
+          <p className="mt-3 text-white/80">Fale comigo no WhatsApp (mensagem pronta).</p>
+          <p className="mt-3 text-white/80">Fale comigo no WhatsApp.</p>
 
-        <p className="mt-3 text-white/80">
-          Fale comigo no WhatsApp. Respondo rápido e já te digo valores e prazos.
-        </p>
-
-        <ul className="mt-6 grid sm:grid-cols-3 gap-3 text-sm text-white/70">
-          <li className="flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
-            Atendimento humano e direto
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
-            Orçamento sem compromisso
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
-            Portfólio e cases reais
-          </li>
-        </ul>
-
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <a
-            href={`https://wa.me/${wa}?text=${msg}`}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-6 py-3 font-semibold shadow-lg shadow-black/30"
-          >
-            Abrir WhatsApp com mensagem
-          </a>
-
-          <div className="text-sm text-white/60">
-            ou salve: <span className="text-white/80 font-medium">+55 (41) 99959-2689</span>
-            <div className="text-white/40">Tempo médio de resposta: até 1h em horário comercial</div>
+          <div className="mt-6">
+            <a
+              href={`https://wa.me/${wa}?text=${msg}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block w-full sm:w-auto rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-6 py-3 text-center font-semibold"
+            >
+              Abrir WhatsApp com mensagem
+            </a>
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-4 justify-between text-white/60 text-sm">
+        <div className="flex items-center gap-3">
+          <Logo />
+          <span>© {new Date().getFullYear()} Rodrigues Studio. Todos os direitos reservados.</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <a href="#portfolio" className="hover:text-white/90">Portfólio</a>
+          <a href="#sobre" className="hover:text-white/90">Sobre</a>
+          <a href="#contato" className="hover:text-white/90">Contato</a>
+        </div>
+      </div>
+    </footer>
   );
 }
 

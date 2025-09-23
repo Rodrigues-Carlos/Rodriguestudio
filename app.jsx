@@ -354,21 +354,41 @@ function Contact() {
 
   return (
     <section id="contato" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="rounded-3xl border border-white/10 overflow-hidden">
-        <div className="p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
-          <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
-          <p className="mt-3 text-white/80">Fale comigo no WhatsApp (mensagem pronta).</p>
-          <p className="mt-3 text-white/80">Fale comigo no WhatsApp.</p>
+      <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-8 md:p-12">
+        <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
 
-          <div className="mt-6">
-            <a
-              href={`https://wa.me/${wa}?text=${msg}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block w-full sm:w-auto rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-6 py-3 text-center font-semibold"
-            >
-              Abrir WhatsApp com mensagem
-            </a>
+        <p className="mt-3 text-white/80">
+          Fale comigo no WhatsApp. Respondo rápido e já te digo valores e prazos.
+        </p>
+
+        <ul className="mt-6 grid sm:grid-cols-3 gap-3 text-sm text-white/70">
+          <li className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
+            Atendimento humano e direto
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
+            Orçamento sem compromisso
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
+            Portfólio e cases reais
+          </li>
+        </ul>
+
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <a
+            href={`https://wa.me/${wa}?text=${msg}`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-6 py-3 font-semibold shadow-lg shadow-black/30"
+          >
+            Abrir WhatsApp com mensagem
+          </a>
+
+          <div className="text-sm text-white/60">
+            ou salve: <span className="text-white/80 font-medium">+55 (41) 99959-2689</span>
+            <div className="text-white/40">Tempo médio de resposta: até 1h em horário comercial</div>
           </div>
         </div>
       </div>

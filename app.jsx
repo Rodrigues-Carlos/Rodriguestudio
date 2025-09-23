@@ -9,7 +9,7 @@ function App() {
         id: 1,
         title: "Pacientes — Institucional",
         cat: "institucional",
-        thumb: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop.jpg",
+        thumb: "",
         url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-[9/16]",
       },

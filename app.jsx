@@ -9,32 +9,28 @@ function App() {
         id: 1,
         title: "Pacientes — Institucional",
         cat: "institucional",
-        thumb:
-          "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
+        url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-video",
       },
       {
         id: 2,
         title: "ESTAFERA — Youtube",
         cat: "entretenimento",
-        thumb:
-          "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
+        url: "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-[4/5]",
       },
       {
         id: 3,
         title: "Carro - Cinemático",
         cat: "cinemático",
-        thumb:
-          "https://www.youtube.com/watch?v=BPAbjeK8yoY",
+        url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
         ratio: "aspect-square",
       },
       {
         id: 4,
         title: "Moto — Cinemático",
         cat: "cinematico",
-        thumb:
-          "https://www.youtube.com/watch?v=eGM58NmU3oM",
+        url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
         ratio: "aspect-[21/9]",
       },
     ],
@@ -353,11 +349,7 @@ function About() {
 function Contact() {
   const wa = "5541999592689";
   const msg = encodeURIComponent(
-    "Olá, Carlos! Vi seu portfólio e quero um orçamento.\n" +
-    "Projeto: [institucional/comercial/youtube/cinemático]\n" +
-    "Prazo: [data]\n" +
-    "Budget: [R$]\n" +
-    "Mensagem: [objetivo em 1 frase]"
+    "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
   );
 
   return (
@@ -365,25 +357,16 @@ function Contact() {
       <div className="rounded-3xl border border-white/10 overflow-hidden">
         <div className="p-8 md:p-12 bg-gradient-to-b from-white/5 to-transparent">
           <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
-          <p className="mt-3 text-white/80">
-            Fale comigo no WhatsApp (mensagem já pronta) ou envie um e-mail.
-          </p>
+          <p className="mt-3 text-white/80">Fale comigo no WhatsApp (mensagem pronta).</p>
 
-          <div className="mt-6 grid sm:grid-cols-2 gap-3">
+          <div className="mt-6">
             <a
               href={`https://wa.me/${wa}?text=${msg}`}
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-4 py-3 text-center font-semibold"
+              className="inline-block w-full sm:w-auto rounded-xl bg-red-600 hover:bg-red-500 transition-colors px-6 py-3 text-center font-semibold"
             >
               Abrir WhatsApp com mensagem
-            </a>
-
-            <a
-              href="mailto:Studio.rodr@gmail.com?subject=Orçamento%20—%20Rodrigues%20Studio&body=Olá%2C%20Carlos!%20Quero%20um%20orçamento.%0AProjeto%3A%20%5Binstitucional%2Fcomercial%2Fyoutube%2Fcinem%C3%A1tico%5D%0APrazo%3A%20%5Bdata%5D%0ABudget%3A%20%5BR%24%5D%0AMensagem%3A%20%5Bobjetivo%20em%201%20frase%5D"
-              className="rounded-xl border border-white/20 hover:border-red-500/60 transition-colors px-4 py-3 text-center font-semibold"
-            >
-              Enviar e-mail
             </a>
           </div>
         </div>

@@ -124,27 +124,11 @@ function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
         <div className="max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-            Cinema para empresas que querem <span className="text-red-500">resultado</span>.
+            Cinema para marcas que querem <span className="text-red-500">resultado</span>.
           </h1>
           <p className="mt-4 text-lg md:text-xl text-white/80">
-            Produção e edição de vídeos com linguagem cinematográfica para campanhas, institucionais e social media.
+            Produção e edição de vídeos com linguagem cinematográfica.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#portfolio"
-              className="rounded-full bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
-            >
-              Ver portfólio
-            </a>
-            <a
-              href="https://wa.me/5541999592689"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400 transition-colors"
-            >
-              Falar no WhatsApp
-            </a>
-          </div>
         </div>
       </div>
     </section>

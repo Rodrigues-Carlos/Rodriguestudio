@@ -1,4 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
+const { useMemo, useState, useEffect } = React;
+const { createRoot } = ReactDOM;
 
 function App() {
   const [category, setCategory] = useState("todos");
@@ -538,6 +539,5 @@ function Footer() {
   );
 }
 
-// Render
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(<PortfolioMockup />);

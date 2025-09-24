@@ -107,6 +107,10 @@ function Logo() {
 }
 
 function Hero() {
+  const wa = "5541999592689";
+const msg = encodeURIComponent(
+  "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
+);
   return (
     <section id="top" className="relative h-[92vh] w-full overflow-hidden">
       <video
@@ -134,7 +138,7 @@ function Hero() {
               Ver portfólio
             </a>
             <a
-              href="https://wa.me/5541999592689"
+              href={`https://wa.me/${wa}?text=${msg}`}
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400 transition-colors"
@@ -378,10 +382,6 @@ function Contact() {
           >
             Abrir WhatsApp com mensagem
           </a>
-
-          <div className="mt-3 text-sm text-white/50">
-            +55 (41) 99959-2689
-          </div>
         </div>
       </div>
     </section>

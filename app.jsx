@@ -539,5 +539,5 @@ function Footer() {
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<PortfolioMockup />);
+const root = createRoot(document.getElementById("root"));
+root.render(<App />);

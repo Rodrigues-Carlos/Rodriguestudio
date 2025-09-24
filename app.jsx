@@ -250,169 +250,68 @@ function Portfolio({ category, setCategory, items }) {
   ];
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="flex items-end justify-between gap-6 mb-6">
-        <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
-        <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Quero algo assim →</a>
-      </div>
-
-      <div className="flex flex-wrap gap-2 mb-8">
-        {tabs.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setCategory(t.key)}
-            className={
-              "px-4 py-2 rounded-full border text-sm transition-colors " +
-              (category === t.key
-                ? "bg-red-600 border-red-600"
-                : "border-white/15 hover:border-red-500/60")
-            }
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((p) => (
-          <article key={p.id} className="group">
-            {/* se estiver tocando ESTE card */}
-            {playing === p.id ? (
-              <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-black`}>
-                {/* fechar */}
-                <button
-                  onClick={() => setPlaying(null)}
-                  className="absolute z-10 top-3 right-3 h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20 backdrop-blur"
-                  title="Fechar"
-                >✕</button>
+  {items.map((p) => (
+    <article key={p.id} className="group">
+      <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+        {(() => {
+          const em = toEmbed(p.url || "");
+          if (em?.type === "youtube") {
+            return (
+              <iframe
+                src={em.src}
+                title={p.title}
+                className="absolute inset-0 h-full w-full"
+                allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
+                loading="lazy"
+              />
+            );
+          }
+          if (em?.type === "instagram") {
+            return (
+              <iframe
+                src={em.src}
+                title={p.title}
+                className="absolute inset-0 h-full w-full bg-black"
+                loading="lazy"
+              />
+            );
+          }
+          if (em?.type === "mp4") {
+            return (
+              <video
+                src={em.src}
+                poster={p.thumb}
+                className="absolute inset-0 h-full w-full"
+                controls
+                playsInline
+              />
+            );
+          }
+          // fallback: capa
+          return (
+            <img
+              src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+              alt={p.title}
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+            />
+          );
+        })()}
 
-                {(() => {
-                  const em = toEmbed(p.url || "");
-                  if (em?.type === "youtube") {
-                    return (
-                      <iframe
-                        src={em.src}
-                        title={p.title}
-                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                        allowFullScreen
-                        className="absolute inset-0 w-full h-full"
-                        loading="lazy"
-                      />
-                    );
-                  }
-                  if (em?.type === "instagram") {
-                    return (
-                      <iframe
-                        src={em.src}
-                        title={p.title}
-                        className="absolute inset-0 w-full h-full bg-black"
-                        loading="lazy"
-                      />
-                    );
-                  }
-                  if (em?.type === "mp4") {
-                    return (
-                      <video
-                        src={em.src}
-                        poster={p.thumb}
-                        className="absolute inset-0 w-full h-full"
-                        controls
-                        autoPlay
-                        playsInline
-                      />
-                    );
-                  }
-                  // fallback: só capa
-                  return (
-                    <img
-                      src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
-                      alt={p.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  );
-                })()}
-
-                {/* título/categoria por cima */}
-                <div className="pointer-events-none absolute inset-0 flex items-end p-4">
-                  <div>
-                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                      <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-                    </div>
-                    <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              // estado normal (thumbnail + play)
-              <button onClick={() => setPlaying(p.id)} className="block w-full text-left">
-                <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-                  <div className="absolute inset-0 flex items-end p-4">
-                    <div>
-                      <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                        <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-                      </div>
-                      <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            )}
-          </article>
-        ))}
-      </div>
-                {open && (
-            <div className="fixed inset-0 z-[60]">
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose} />
-              <div className="absolute inset-0 flex items-center justify-center p-4">
-                <div className="relative w-full max-w-5xl">
-                  <button
-                    onClick={handleClose}
-                    className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm"
-                  >
-                    Fechar ✕
-                  </button>
-
-                  <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-black">
-                    {(() => {
-                      const em = toEmbed(open.url || "");
-
-                      if (em.type === "youtube") {
-                        return (
-                          <iframe
-                            src={em.src}
-                            title={open.title}
-                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                            allowFullScreen
-                            className="h-full w-full"
-                            loading="lazy"
-                          />
-                        );
-                      }
-                      if (em.type === "instagram") {
-                        return (
-                          <iframe
-                            src={em.src}
-                            title={open.title}
-                            className="h-full w-full bg-black"
-                            loading="lazy"
-                          />
-                        );
-                      }
-                      if (em.type === "mp4") {
-                        return <video src={em.src} className="h-full w-full" controls autoPlay />;
-                      }
-
-                      // fallback — navega na mesma aba
-                      window.location.href = em.src;
-                      return null;
-                    })()}
-                  </div>
-
-                  <div className="mt-3 text-white/80 text-sm">{open.title}</div>
-                </div>
-              </div>
+        {/* overlay de info */}
+        <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+          <div>
+            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+              <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
             </div>
-          )}
-
+            <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
+          </div>
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
     </section>
   );
 }

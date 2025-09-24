@@ -23,7 +23,7 @@ function App() {
         id: 3,
         title: "Telas Fravetto",
         cat: "comercial",
-        thumb: "thumbs/quiz estetica.png",
+        thumb: "thumbs/clinica e cliente.png",
         url: "conteudo/Criativo Frevetto.mp4",
         ratio: "aspect-square",
       },
@@ -217,21 +217,38 @@ function Services() {
   );
 }
 
-function ytId(urlStr) {
+function ytId(u) {
   try {
-    const u = new URL(urlStr);
-    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
-    if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
-    if (u.hostname.includes("youtube.com")) return u.searchParams.get("v");
+    const url = new URL(u);
+    if (url.hostname.includes("youtu.be")) return url.pathname.slice(1);
+    if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/")[2];
+    if (url.hostname.includes("youtube.com")) return url.searchParams.get("v");
   } catch {}
   return null;
 }
-function youtubeThumb(urlStr) {
-  const id = ytId(urlStr);
-  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+
+function toEmbed(url) {
+  // YouTube
+  const id = ytId(url);
+  if (id) return { type: "youtube", src: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` };
+
+  // Instagram (usa /embed)
+  if (/instagram\.com\/p\//.test(url)) {
+    const path = url.split("?")[0].replace(/\/$/, "");
+    return { type: "instagram", src: `${path}/embed` };
+  }
+
+  // MP4/local
+  if (url.endsWith(".mp4")) return { type: "mp4", src: url };
+
+  // fallback
+  return { type: "external", src: url };
 }
 
 function Portfolio({ category, setCategory, items }) {
+  const [open, setOpen] = useState(null);
+  const handleOpen = (p) => setOpen(p);
+  const handleClose = () => setOpen(null);
   const tabs = [
   { key: "todos", label: "Todos" },
   { key: "institucional", label: "Institucional" },
@@ -267,10 +284,10 @@ function Portfolio({ category, setCategory, items }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((p) => (
           <article key={p.id} className="group">
-            <a href={p.url} target="_blank" rel="noreferrer" className="block">
+            <button onClick={() => handleOpen(p)} className="block w-full text-left">
               <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
                 <img
-                  src={p.cover || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                  src={p.thumb}
                   alt={p.title}
                   className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
@@ -288,10 +305,33 @@ function Portfolio({ category, setCategory, items }) {
                   <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
                 </div>
               </div>
-            </a>
+            </button>
           </article>
         ))}
       </div>
+                {open && (
+            <div className="fixed inset-0 z-[60]">
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose} />
+              <div className="absolute inset-0 flex items-center justify-center p-4">
+                <div className="relative w-full max-w-5xl">
+                  <button
+                    onClick={handleClose}
+                    className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm"
+                  >
+                    Fechar ✕
+                  </button>
+
+                  <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-black">
+                    {/* troca por <video> local se quiser; por enquanto só fecha/abre */}
+                    <div className="h-full w-full grid place-items-center text-white/70">Vídeo aqui</div>
+                  </div>
+
+                  <div className="mt-3 text-white/80 text-sm">{open.title}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
     </section>
   );
 }

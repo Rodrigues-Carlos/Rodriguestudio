@@ -33,7 +33,7 @@ function App() {
         id: 4,
         title: "Carro - Cinemático",
         cat: "cinematico",
-        thumb: "",
+        thumb: "thumbs/Bronco cinematic.png",
         url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
         ratio: "aspect-video",
       },
@@ -41,7 +41,7 @@ function App() {
         id: 5,
         title: "Moto — Cinemático",
         cat: "cinematico",
-        thumb: "",
+        thumb: "thumbs/cinematic moto.png",
         url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
         ratio: "aspect-video",
       },
@@ -109,7 +109,7 @@ function Logo() {
 function Hero() {
   const wa = "5541999592689";
 const msg = encodeURIComponent(
-  "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
+  "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
 );
   return (
     <section id="top" className="relative h-[92vh] w-full overflow-hidden">
@@ -380,7 +380,7 @@ function Contact() {
             rel="noreferrer"
             className="mt-6 inline-block rounded-xl px-8 py-4 font-semibold bg-red-600 hover:bg-red-500 transition-colors shadow-lg shadow-black/30"
           >
-            Abrir WhatsApp com mensagem
+            Falar no WhatsApp
           </a>
         </div>
       </div>

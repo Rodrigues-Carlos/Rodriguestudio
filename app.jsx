@@ -22,7 +22,7 @@ function App() {
   },
   {
     id: 3,
-    title: "Telas Fravetto",
+    title: "Telas Favretto",
     cat: "comercial",
     thumb: "thumbs/clinica-cliente.png",
     url: "conteudo/Criativo-frevetto.mp4", // renomeie o arquivo para não ter espaço
@@ -240,14 +240,38 @@ function youtubeThumb(u) {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
-function Portfolio({ category, setCategory, items }) {
+<Portfolio category={category} setCategory={setCategory} items={filtered} />
   const tabs = [
-    { key: "todos", label: "Todos" },
-    { key: "institucional", label: "Institucional" },
-    { key: "comercial", label: "Comercial" },
-    { key: "youtube", label: "YouTube" },
-    { key: "cinematico", label: "Cinemático" },
-  ];
+  { key: "todos", label: "Todos" },
+  { key: "institucional", label: "Institucional" },
+  { key: "comercial", label: "Comercial" },
+  { key: "youtube", label: "YouTube" },
+  { key: "cinematico", label: "Cinemático" },
+];
+
+<div className="flex flex-wrap gap-2 mb-8">
+  {tabs.map(t => (
+    <button
+      key={t.key}
+      onClick={() => setCategory(t.key)}
+      className={
+        "px-4 py-2 rounded-full border text-sm transition-colors " +
+        (category === t.key
+          ? "bg-red-600 border-red-600"
+          : "border-white/15 hover:border-red-500/60")
+      }
+    >
+      {t.label}
+    </button>
+  ))}
+</div>
+  const [category, setCategory] = useState("todos");
+
+const filtered = useMemo(
+  () => (category === "todos" ? projects : projects.filter(p => p.cat === category)),
+  [category, projects]
+);
+
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -314,8 +338,6 @@ function Portfolio({ category, setCategory, items }) {
 </div>
     </section>
   );
-}
-
 function Testimonials() {
   const quotes = [
     {

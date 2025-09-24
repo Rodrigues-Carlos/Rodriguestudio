@@ -8,37 +8,37 @@ function App() {
         id: 1,
         title: "Quiz estética",
         cat: "institucional",
-        thumb: "thumbs/quiz estetica.png",
-        url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-video",
+        thumb: "thumbs/quiz-estetica.png",
+        url: "www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
+        ratio: "aspect-[9/21]",
       },
       {
         id: 2,
         title: "Canal ESTAFERA",
         cat: "entretenimento",
-        url: "https://www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
+        url: "www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
         ratio: "aspect-video",
       },
       {
         id: 3,
         title: "Telas Fravetto",
         cat: "comercial",
-        thumb: "thumbs/clinica e cliente.png",
-        url: "conteudo/Criativo Frevetto.mp4",
+        thumb: "thumbs/clinica-cliente.png",
+        url: "conteudo/Criativo-frevetto.mp4",
         ratio: "aspect-square",
       },
       {
         id: 4,
         title: "Carro",
         cat: "cinematico",
-        url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
+        url: "www.youtube.com/watch?v=BPAbjeK8yoY",
         ratio: "aspect-video",
       },
       {
         id: 5,
         title: "Moto",
         cat: "cinematico",
-        url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
+        url: "www.youtube.com/watch?v=eGM58NmU3oM",
         ratio: "aspect-video",
       },
     ],
@@ -249,6 +249,11 @@ function Portfolio({ category, setCategory, items }) {
   const [open, setOpen] = useState(null);
   const handleOpen = (p) => setOpen(p);
   const handleClose = () => setOpen(null);
+  React.useEffect(() => {
+  function onKey(e) { if (e.key === "Escape") handleClose(); }
+  if (open) window.addEventListener("keydown", onKey);
+  return () => window.removeEventListener("keydown", onKey);
+}, [open]);
   const tabs = [
   { key: "todos", label: "Todos" },
   { key: "institucional", label: "Institucional" },
@@ -322,8 +327,39 @@ function Portfolio({ category, setCategory, items }) {
                   </button>
 
                   <div className="aspect-video w-full rounded-xl overflow-hidden border border-white/10 bg-black">
-                    {/* troca por <video> local se quiser; por enquanto só fecha/abre */}
-                    <div className="h-full w-full grid place-items-center text-white/70">Vídeo aqui</div>
+                    {(() => {
+                      const em = toEmbed(open.url || "");
+
+                      if (em.type === "youtube") {
+                        return (
+                          <iframe
+                            src={em.src}
+                            title={open.title}
+                            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                            allowFullScreen
+                            className="h-full w-full"
+                            loading="lazy"
+                          />
+                        );
+                      }
+                      if (em.type === "instagram") {
+                        return (
+                          <iframe
+                            src={em.src}
+                            title={open.title}
+                            className="h-full w-full bg-black"
+                            loading="lazy"
+                          />
+                        );
+                      }
+                      if (em.type === "mp4") {
+                        return <video src={em.src} className="h-full w-full" controls autoPlay />;
+                      }
+
+                      // fallback — navega na mesma aba
+                      window.location.href = em.src;
+                      return null;
+                    })()}
                   </div>
 
                   <div className="mt-3 text-white/80 text-sm">{open.title}</div>

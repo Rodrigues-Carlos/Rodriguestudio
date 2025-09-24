@@ -1,4 +1,4 @@
-const { useMemo, useState } = React;
+import { useMemo, useState, useEffect } from "react";
 
 function App() {
   const [category, setCategory] = useState("todos");
@@ -10,7 +10,7 @@ function App() {
         cat: "institucional",
         thumb: "thumbs/quiz-estetica.png",
         url: "www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-[9/21]",
+        ratio: "aspect-[9/16]",
       },
       {
         id: 2,
@@ -226,42 +226,34 @@ function ytId(u) {
   } catch {}
   return null;
 }
-
+function youtubeThumb(u) {
+  const id = ytId(u);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
 function toEmbed(url) {
-  // YouTube
   const id = ytId(url);
   if (id) return { type: "youtube", src: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` };
-
-  // Instagram (usa /embed)
-  if (/instagram\.com\/p\//.test(url)) {
-    const path = url.split("?")[0].replace(/\/$/, "");
-    return { type: "instagram", src: `${path}/embed` };
-  }
-
-  // MP4/local
-  if (url.endsWith(".mp4")) return { type: "mp4", src: url };
-
-  // fallback
+  if (/instagram\.com\/p\//.test(url)) return { type: "instagram", src: `${url.split("?")[0].replace(/\/$/,"")}/embed` };
+  if ((url || "").endsWith(".mp4")) return { type: "mp4", src: url };
   return { type: "external", src: url };
 }
 
 function Portfolio({ category, setCategory, items }) {
-  const [open, setOpen] = useState(null);
-  const handleOpen = (p) => setOpen(p);
-  const handleClose = () => setOpen(null);
-  React.useEffect(() => {
-  function onKey(e) { if (e.key === "Escape") handleClose(); }
-  if (open) window.addEventListener("keydown", onKey);
-  return () => window.removeEventListener("keydown", onKey);
-}, [open]);
-  const tabs = [
-  { key: "todos", label: "Todos" },
-  { key: "institucional", label: "Institucional" },
-  { key: "comercial", label: "Comercial" },
-  { key: "entretenimento", label: "Entretenimento" },
-  { key: "cinematico", label: "Cinemático" },
-  ];
+  const [playing, setPlaying] = useState(null);
 
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") setPlaying(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const tabs = [
+    { key: "todos", label: "Todos" },
+    { key: "institucional", label: "Institucional" },
+    { key: "comercial", label: "Comercial" },
+    { key: "youtube", label: "YouTube" },
+    { key: "cinematico", label: "Cinemático" },
+  ];
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
       <div className="flex items-end justify-between gap-6 mb-6">
@@ -289,28 +281,85 @@ function Portfolio({ category, setCategory, items }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((p) => (
           <article key={p.id} className="group">
-            <button onClick={() => handleOpen(p)} className="block w-full text-left">
-              <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-                <img
-                  src={p.thumb}
-                  alt={p.title}
-                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <div className="absolute inset-0 flex items-end p-4">
-                  <div>
-                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                      <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+            {/* se estiver tocando ESTE card */}
+            {playing === p.id ? (
+              <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-black`}>
+                {/* botão fechar */}
+                <button
+                  onClick={() => setPlaying(null)}
+                  className="absolute z-20 top-3 right-3 h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20 backdrop-blur"
+                  title="Fechar"
+                >
+                  ✕
+                </button>
+
+                {/* player bonito inline */}
+                {(() => {
+                  const em = toEmbed(p.url || "");
+                  if (em.type === "youtube") {
+                    return (
+                      <iframe
+                        src={em.src}
+                        title={p.title}
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                        loading="lazy"
+                      />
+                    );
+                  }
+                  if (em.type === "instagram") {
+                    return (
+                      <iframe
+                        src={em.src}
+                        title={p.title}
+                        className="absolute inset-0 w-full h-full bg-black"
+                        loading="lazy"
+                      />
+                    );
+                  }
+                  if (em.type === "mp4") {
+                    return (
+                      <video
+                        src={em.src}
+                        className="absolute inset-0 w-full h-full"
+                        controls
+                        autoPlay
+                      />
+                    );
+                  }
+                  // fallback: abre na mesma aba
+                  window.location.href = p.url;
+                  return null;
+                })()}
+              </div>
+            ) : (
+              // estado NORMAL (thumbnail + play)
+              <button onClick={() => setPlaying(p.id)} className="block w-full text-left">
+                <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+                  <img
+                    src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                    alt={p.title}
+                    className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 flex items-end p-4">
+                    <div>
+                      <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                        <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                      </div>
+                      <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
                     </div>
-                    <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
+                  </div>
+                  <div className="absolute inset-0 opacity-100 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="h-14 w-14 rounded-full border border-white/30 bg-white/10 backdrop-blur grid place-items-center text-xs font-bold">
+                      ▶
+                    </span>
                   </div>
                 </div>
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
-                </div>
-              </div>
-            </button>
+              </button>
+            )}
           </article>
         ))}
       </div>

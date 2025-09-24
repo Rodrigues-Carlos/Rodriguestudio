@@ -65,23 +65,39 @@ function App() {
 }
 
 function Header() {
+  const wa = "5541999592689";
+  const msg = encodeURIComponent(
+    "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
+  );
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Logo />
+        <LogoCompact />
+
         <nav className="hidden md:flex items-center gap-8 text-sm">
           <a href="#servicos" className="hover:text-red-500 transition-colors">Serviços</a>
-          <a href="#portfolio" className="hover:text-red-500 transition-colors">Portfólio</a>
-          <a href="#depoimentos" className="hover:text-red-500 transition-colors">Depoimentos</a>
+          <a href="#portfolio" className="hover:text-red-500 transition-colors">Destaques</a>
           <a href="#sobre" className="hover:text-red-500 transition-colors">Sobre</a>
           <a href="#contato" className="hover:text-red-500 transition-colors">Contato</a>
         </nav>
-        <a
-          href="#contato"
-          className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-500 transition-colors"
-        >
-          Orçar projeto
-        </a>
+
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="#portfolio"
+            className="rounded-full bg-white text-black px-6 py-3 text-sm font-semibold whitespace-nowrap shadow-lg shadow-black/30 hover:bg-red-500 hover:text-white hover:shadow-red-500/40 transition-all"
+          >
+            Ver portfólio
+          </a>
+          <a
+            href={`https://wa.me/${wa}?text=${msg}`}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full px-6 py-3 text-sm font-semibold whitespace-nowrap border border-white/30 bg-white/5 backdrop-blur-[2px] text-white shadow-lg shadow-black/30 hover:bg-white/10 hover:border-red-500 hover:shadow-red-500/30 transition-all"
+          >
+            Falar no WhatsApp
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -240,104 +256,102 @@ function youtubeThumb(u) {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
-<Portfolio category={category} setCategory={setCategory} items={filtered} />
+function Portfolio({ category, setCategory, items }) {
   const tabs = [
-  { key: "todos", label: "Todos" },
-  { key: "institucional", label: "Institucional" },
-  { key: "comercial", label: "Comercial" },
-  { key: "youtube", label: "YouTube" },
-  { key: "cinematico", label: "Cinemático" },
-];
-
-<div className="flex flex-wrap gap-2 mb-8">
-  {tabs.map(t => (
-    <button
-      key={t.key}
-      onClick={() => setCategory(t.key)}
-      className={
-        "px-4 py-2 rounded-full border text-sm transition-colors " +
-        (category === t.key
-          ? "bg-red-600 border-red-600"
-          : "border-white/15 hover:border-red-500/60")
-      }
-    >
-      {t.label}
-    </button>
-  ))}
-</div>
-  const [category, setCategory] = useState("todos");
-
-const filtered = useMemo(
-  () => (category === "todos" ? projects : projects.filter(p => p.cat === category)),
-  [category, projects]
-);
+    { key: "todos", label: "Todos" },
+    { key: "institucional", label: "Institucional" },
+    { key: "comercial", label: "Comercial" },
+    { key: "youtube", label: "YouTube" },
+    { key: "cinematico", label: "Cinemático" },
+  ];
 
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {items.map((p) => (
-    <article key={p.id} className="group">
-      <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-        {(() => {
-          const em = toEmbed(p.url || "");
-          if (em?.type === "youtube") {
-            return (
-              <iframe
-                src={em.src}
-                title={p.title}
-                className="absolute inset-0 h-full w-full"
-                allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
-                loading="lazy"
-              />
-            );
-          }
-          if (em?.type === "instagram") {
-            return (
-              <iframe
-                src={em.src}
-                title={p.title}
-                className="absolute inset-0 h-full w-full bg-black"
-                loading="lazy"
-              />
-            );
-          }
-          if (em?.type === "mp4") {
-            return (
-              <video
-                src={em.src}
-                poster={p.thumb}
-                className="absolute inset-0 h-full w-full"
-                controls
-                playsInline
-              />
-            );
-          }
-          // fallback: capa
-          return (
-            <img
-              src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
-              alt={p.title}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="lazy"
-            />
-          );
-        })()}
-
-        {/* overlay de info */}
-        <div className="pointer-events-none absolute inset-0 flex items-end p-4">
-          <div>
-            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-              <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-            </div>
-            <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
-          </div>
-        </div>
+      <div className="flex items-end justify-between gap-6 mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold">Destaques</h2>
+        <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Quero algo assim →</a>
       </div>
-    </article>
-  ))}
-</div>
+
+      <div className="flex flex-wrap gap-2 mb-8">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setCategory(t.key)}
+            className={
+              "px-4 py-2 rounded-full border text-sm transition-colors " +
+              (category === t.key
+                ? "bg-red-600 border-red-600"
+                : "border-white/15 hover:border-red-500/60")
+            }
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((p) => (
+          <article key={p.id} className="group">
+            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+              {(() => {
+                const em = toEmbed(p.url || "");
+                if (em?.type === "youtube") {
+                  return (
+                    <iframe
+                      src={em.src}
+                      title={p.title}
+                      className="absolute inset-0 h-full w-full"
+                      allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
+                      loading="lazy"
+                    />
+                  );
+                }
+                if (em?.type === "instagram") {
+                  return (
+                    <iframe
+                      src={em.src}
+                      title={p.title}
+                      className="absolute inset-0 h-full w-full bg-black"
+                      loading="lazy"
+                    />
+                  );
+                }
+                if (em?.type === "mp4") {
+                  return (
+                    <video
+                      src={em.src}
+                      poster={p.thumb}
+                      className="absolute inset-0 h-full w-full"
+                      controls
+                      playsInline
+                    />
+                  );
+                }
+                return (
+                  <img
+                    src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                    alt={p.title}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                );
+              })()}
+
+              <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                  </div>
+                  <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
+}
 function Testimonials() {
   const quotes = [
     {
@@ -419,7 +433,7 @@ function About() {
 function Contact() {
   const wa = "5541999592689";
   const msg = encodeURIComponent(
-    "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
+    "Olá, Carlos! Quero orçamento para um vídeo do meu negócio. Envie valores e prazo, por favor. Podemos conversar?"
   );
 
   return (
@@ -427,15 +441,15 @@ function Contact() {
       <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-10">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
-
           <a
             href={`https://wa.me/${wa}?text=${msg}`}
             target="_blank"
             rel="noreferrer"
             className="mt-6 inline-block rounded-xl px-8 py-4 font-semibold bg-red-600 hover:bg-red-500 transition-colors shadow-lg shadow-black/30"
           >
-            Falar no WhatsApp
+            Abrir WhatsApp com mensagem
           </a>
+          <div className="mt-3 text-sm text-white/50">+55 (41) 99959-2689</div>
         </div>
       </div>
     </section>

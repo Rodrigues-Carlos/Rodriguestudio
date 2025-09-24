@@ -4,46 +4,44 @@ function App() {
   const [category, setCategory] = useState("todos");
 
   const projects = useMemo(() => [
-      {
-        id: 1,
-        title: "Quiz estética",
-        cat: "institucional",
-        thumb: "thumbs/quiz-estetica.png",
-        url: "www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
-        ratio: "aspect-[9/16]",
-      },
-      {
-        id: 2,
-        title: "Canal ESTAFERA",
-        cat: "entretenimento",
-        url: "www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
-        ratio: "aspect-video",
-      },
-      {
-        id: 3,
-        title: "Telas Fravetto",
-        cat: "comercial",
-        thumb: "thumbs/clinica-cliente.png",
-        url: "conteudo/Criativo-frevetto.mp4",
-        ratio: "aspect-square",
-      },
-      {
-        id: 4,
-        title: "Carro",
-        cat: "cinematico",
-        url: "www.youtube.com/watch?v=BPAbjeK8yoY",
-        ratio: "aspect-video",
-      },
-      {
-        id: 5,
-        title: "Moto",
-        cat: "cinematico",
-        url: "www.youtube.com/watch?v=eGM58NmU3oM",
-        ratio: "aspect-video",
-      },
-    ],
-    []
-  );
+  {
+    id: 1,
+    title: "Quiz estética",
+    cat: "institucional",
+    thumb: "thumbs/quiz-estetica.png",
+    url: "https://www.instagram.com/p/DOGfTXpDDXq/",
+    ratio: "aspect-[9/16]",
+  },
+  {
+    id: 2,
+    title: "Canal ESTAFERA",
+    cat: "entretenimento",
+    url: "https://www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
+    ratio: "aspect-video",
+  },
+  {
+    id: 3,
+    title: "Telas Fravetto",
+    cat: "comercial",
+    thumb: "thumbs/clinica-cliente.png",
+    url: "conteudo/Criativo-frevetto.mp4", // renomeie o arquivo para não ter espaço
+    ratio: "aspect-square",
+  },
+  {
+    id: 4,
+    title: "Carro",
+    cat: "cinematico",
+    url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
+    ratio: "aspect-video",
+  },
+  {
+    id: 5,
+    title: "Moto",
+    cat: "cinematico",
+    url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
+    ratio: "aspect-video",
+  },
+], []);
 
   const filtered = useMemo(
     () => (category === "todos" ? projects : projects.filter((p) => p.cat === category)),
@@ -226,27 +224,22 @@ function ytId(u) {
   } catch {}
   return null;
 }
+function toEmbed(url) {
+  const id = ytId(url);
+  if (id) return { type: "youtube", src: `https://www.youtube.com/embed/${id}?modestbranding=1&rel=0` };
+  if (/instagram\.com\/p\//.test(url)) {
+    const base = url.split("?")[0].replace(/\/$/, "");
+    return { type: "instagram", src: `${base}/embed` };
+  }
+  if ((url || "").endsWith(".mp4")) return { type: "mp4", src: url };
+  return null;
+}
 function youtubeThumb(u) {
   const id = ytId(u);
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
-function toEmbed(url) {
-  const id = ytId(url);
-  if (id) return { type: "youtube", src: `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` };
-  if (/instagram\.com\/p\//.test(url)) return { type: "instagram", src: `${url.split("?")[0].replace(/\/$/,"")}/embed` };
-  if ((url || "").endsWith(".mp4")) return { type: "mp4", src: url };
-  return { type: "external", src: url };
-}
 
 function Portfolio({ category, setCategory, items }) {
-  const [playing, setPlaying] = useState(null);
-
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") setPlaying(null); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   const tabs = [
     { key: "todos", label: "Todos" },
     { key: "institucional", label: "Institucional" },
@@ -284,19 +277,16 @@ function Portfolio({ category, setCategory, items }) {
             {/* se estiver tocando ESTE card */}
             {playing === p.id ? (
               <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-black`}>
-                {/* botão fechar */}
+                {/* fechar */}
                 <button
                   onClick={() => setPlaying(null)}
-                  className="absolute z-20 top-3 right-3 h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20 backdrop-blur"
+                  className="absolute z-10 top-3 right-3 h-9 px-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm border border-white/20 backdrop-blur"
                   title="Fechar"
-                >
-                  ✕
-                </button>
+                >✕</button>
 
-                {/* player bonito inline */}
                 {(() => {
                   const em = toEmbed(p.url || "");
-                  if (em.type === "youtube") {
+                  if (em?.type === "youtube") {
                     return (
                       <iframe
                         src={em.src}
@@ -308,7 +298,7 @@ function Portfolio({ category, setCategory, items }) {
                       />
                     );
                   }
-                  if (em.type === "instagram") {
+                  if (em?.type === "instagram") {
                     return (
                       <iframe
                         src={em.src}
@@ -318,32 +308,42 @@ function Portfolio({ category, setCategory, items }) {
                       />
                     );
                   }
-                  if (em.type === "mp4") {
+                  if (em?.type === "mp4") {
                     return (
                       <video
                         src={em.src}
+                        poster={p.thumb}
                         className="absolute inset-0 w-full h-full"
                         controls
                         autoPlay
+                        playsInline
                       />
                     );
                   }
-                  // fallback: abre na mesma aba
-                  window.location.href = p.url;
-                  return null;
+                  // fallback: só capa
+                  return (
+                    <img
+                      src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  );
                 })()}
+
+                {/* título/categoria por cima */}
+                <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+                  <div>
+                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                      <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                    </div>
+                    <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
+                  </div>
+                </div>
               </div>
             ) : (
-              // estado NORMAL (thumbnail + play)
+              // estado normal (thumbnail + play)
               <button onClick={() => setPlaying(p.id)} className="block w-full text-left">
                 <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-                  <img
-                    src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
-                    alt={p.title}
-                    className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute inset-0 flex items-end p-4">
                     <div>
                       <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
@@ -351,11 +351,6 @@ function Portfolio({ category, setCategory, items }) {
                       </div>
                       <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
                     </div>
-                  </div>
-                  <div className="absolute inset-0 opacity-100 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span className="h-14 w-14 rounded-full border border-white/30 bg-white/10 backdrop-blur grid place-items-center text-xs font-bold">
-                      ▶
-                    </span>
                   </div>
                 </div>
               </button>

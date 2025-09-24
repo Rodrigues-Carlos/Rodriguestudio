@@ -22,10 +22,10 @@ function App() {
   },
   {
     id: 3,
-    title: "Telas Fravetto",
+    title: "Telas Favretto",
     cat: "comercial",
     thumb: "thumbs/clinica-cliente.png",
-    url: "conteudo/Criativo-frevetto.mp4", // renomeie o arquivo para não ter espaço
+    url: "conteudo/Criativo-frevetto.mp4",
     ratio: "aspect-square",
   },
   {
@@ -242,76 +242,104 @@ function youtubeThumb(u) {
 
 function Portfolio({ category, setCategory, items }) {
   const tabs = [
-    { key: "todos", label: "Todos" },
-    { key: "institucional", label: "Institucional" },
-    { key: "comercial", label: "Comercial" },
-    { key: "youtube", label: "YouTube" },
-    { key: "cinematico", label: "Cinemático" },
+    { key: "todos",          label: "Todos" },
+    { key: "institucional",  label: "Institucional" },
+    { key: "comercial",      label: "Comercial" },
+    { key: "entretenimento", label: "Entretenimento" },
+    { key: "cinematico",     label: "Cinemático" },
   ];
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {items.map((p) => (
-    <article key={p.id} className="group">
-      <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-        {(() => {
-          const em = toEmbed(p.url || "");
-          if (em?.type === "youtube") {
-            return (
-              <iframe
-                src={em.src}
-                title={p.title}
-                className="absolute inset-0 h-full w-full"
-                allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
-                loading="lazy"
-              />
-            );
-          }
-          if (em?.type === "instagram") {
-            return (
-              <iframe
-                src={em.src}
-                title={p.title}
-                className="absolute inset-0 h-full w-full bg-black"
-                loading="lazy"
-              />
-            );
-          }
-          if (em?.type === "mp4") {
-            return (
-              <video
-                src={em.src}
-                poster={p.thumb}
-                className="absolute inset-0 h-full w-full"
-                controls
-                playsInline
-              />
-            );
-          }
-          // fallback: capa
+      {/* Filtros */}
+      <div
+        className="mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar"
+        role="tablist"
+        aria-label="Filtrar portfólio por categoria"
+      >
+        {tabs.map((t) => {
+          const active = category === t.key;
           return (
-            <img
-              src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
-              alt={p.title}
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="lazy"
-            />
+            <button
+              key={t.key}
+              role="tab"
+              aria-selected={active}
+              onClick={() => setCategory(t.key)}
+              className={[
+                "shrink-0 rounded-full px-4 py-2 text-sm transition-colors border",
+                active
+                  ? "bg-red-600 border-red-500 text-white"
+                  : "bg-black border-white/15 text-white/80 hover:text-white hover:border-red-500/60"
+              ].join(" ")}
+            >
+              {t.label}
+            </button>
           );
-        })()}
-
-        {/* overlay de info */}
-        <div className="pointer-events-none absolute inset-0 flex items-end p-4">
-          <div>
-            <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-              <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-            </div>
-            <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
-          </div>
-        </div>
+        })}
       </div>
-    </article>
-  ))}
-</div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((p) => (
+          <article key={p.id} className="group">
+            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+              {(() => {
+                const em = toEmbed(p.url || "");
+                if (em?.type === "youtube") {
+                  return (
+                    <iframe
+                      src={em.src}
+                      title={p.title}
+                      className="absolute inset-0 h-full w-full"
+                      allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
+                      loading="lazy"
+                    />
+                  );
+                }
+                if (em?.type === "instagram") {
+                  return (
+                    <iframe
+                      src={em.src}
+                      title={p.title}
+                      className="absolute inset-0 h-full w-full bg-black"
+                      loading="lazy"
+                    />
+                  );
+                }
+                if (em?.type === "mp4") {
+                  return (
+                    <video
+                      src={em.src}
+                      poster={p.thumb}
+                      className="absolute inset-0 h-full w-full"
+                      controls
+                      playsInline
+                    />
+                  );
+                }
+                // fallback: capa
+                return (
+                  <img
+                    src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                    alt={p.title}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                );
+              })()}
+
+              {/* overlay de info */}
+              <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                  </div>
+                  <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

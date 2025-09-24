@@ -3,45 +3,41 @@ const { useMemo, useState } = React;
 function App() {
   const [category, setCategory] = useState("todos");
 
-  const projects = useMemo(
-    () => [
+  const projects = useMemo(() => [
       {
         id: 1,
-        title: "Pacientes — Institucional",
+        title: "Quiz estética",
         cat: "institucional",
-        thumb: "",
+        thumb: "thumbs/quiz estetica.png",
         url: "hhttps://www.instagram.com/p/DOGfTXpDDXq/ttps://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1600&auto=format&fit=crop",
         ratio: "aspect-video",
       },
       {
         id: 2,
-        title: "ESTAFERA — Entretenimento",
+        title: "Canal ESTAFERA",
         cat: "entretenimento",
-        thumb: "",
-        url: "https://images.unsplash.com/photo-https://www.youtube.com/watch?v=NhFd7FyaFMM&t=14s-667803448bb6?q=80&w=1600&auto=format&fit=crop",
+        url: "https://www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
         ratio: "aspect-video",
       },
       {
         id: 3,
-        title: "Telas Fravetto — Comercial",
+        title: "Telas Fravetto",
         cat: "comercial",
-        thumb: "",
-        src: "conteudo/Criativo Frevetto.mp4",
+        thumb: "thumbs/quiz estetica.png",
+        url: "conteudo/Criativo Frevetto.mp4",
         ratio: "aspect-square",
       },
       {
         id: 4,
-        title: "Carro - Cinemático",
+        title: "Carro",
         cat: "cinematico",
-        thumb: "thumbs/Bronco cinematic.png",
         url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
         ratio: "aspect-video",
       },
       {
         id: 5,
-        title: "Moto — Cinemático",
+        title: "Moto",
         cat: "cinematico",
-        thumb: "thumbs/cinematic moto.png",
         url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
         ratio: "aspect-video",
       },
@@ -221,6 +217,20 @@ function Services() {
   );
 }
 
+function ytId(urlStr) {
+  try {
+    const u = new URL(urlStr);
+    if (u.hostname.includes("youtu.be")) return u.pathname.slice(1);
+    if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
+    if (u.hostname.includes("youtube.com")) return u.searchParams.get("v");
+  } catch {}
+  return null;
+}
+function youtubeThumb(urlStr) {
+  const id = ytId(urlStr);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
+
 function Portfolio({ category, setCategory, items }) {
   const tabs = [
   { key: "todos", label: "Todos" },
@@ -257,26 +267,28 @@ function Portfolio({ category, setCategory, items }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((p) => (
           <article key={p.id} className="group">
-            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5` }>
-              <img
-                src={p.thumb}
-                alt={p.title}
-                className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute inset-0 flex items-end p-4">
-                <div>
-                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+            <a href={p.url} target="_blank" rel="noreferrer" className="block">
+              <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+                <img
+                  src={p.cover || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
+                  alt={p.title}
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-0 flex items-end p-4">
+                  <div>
+                    <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
+                      <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
+                    </div>
+                    <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
                   </div>
-                  <h3 className="text-base font-semibold leading-snug">{p.title}</h3>
+                </div>
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
                 </div>
               </div>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <span className="h-14 w-14 rounded-full bg-white/90 text-black grid place-items-center text-xs font-bold">▶</span>
-              </div>
-            </div>
+            </a>
           </article>
         ))}
       </div>

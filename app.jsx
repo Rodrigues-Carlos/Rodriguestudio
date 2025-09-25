@@ -176,15 +176,27 @@ function Header() {
   );
 }
 
-function Logo() {
+function Logo({ size = 24 }) {
+  // usamos srcset para ficar nítido em telas retina
+  const base = "/rodrigues-logo-spaced";
+  const src = `${base}-32.png`;
+  const srcSet = `${base}-32.png 32w, ${base}-48.png 48w, ${base}-96.png 96w`;
+
   return (
-    <a href="#top" className="group inline-flex items-center gap-5 select-none">
-      <div className="relative">
-        <span className="text-2xl font-extrabold tracking-tight leading-none">R</span>
-        <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
-      </div>
-      <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
-        Rodrigues Studio
+    <a href="#top" className="inline-flex items-center gap-3 select-none">
+      <img
+        src={src}
+        srcSet={srcSet}
+        sizes={`${size}px`}
+        width={size}
+        height={size}
+        alt="Rodrigues Studio"
+        className="rounded-[6px] shadow-sm"
+        loading="eager"
+        decoding="async"
+      />
+      <span className="text-sm md:text-[13px] font-semibold tracking-tight">
+        Rodrigues Studio — Portfólio
       </span>
     </a>
   );

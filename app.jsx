@@ -1,5 +1,42 @@
 const { useMemo, useState, useEffect } = React;
 const { createRoot } = ReactDOM;
+const _cfg = document.getElementById("wa-config");
+const WA_PHONE = (_cfg?.dataset.phone || "5541999592689").replace(/\D/g, "");
+const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
+const WA_UTM   = _cfg?.dataset.utm || "";
+
+function WhatsAppFAB() {
+  const text = encodeURIComponent(WA_MSG);
+  const utm  = WA_UTM ? `&${WA_UTM}` : "";
+  const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Falar no WhatsApp"
+      className="fixed bottom-5 right-5 z-[9999] group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 rounded-full"
+      title="Abrir conversa no WhatsApp"
+    >
+      {/* Glow/Aura */}
+      <span className="absolute inset-0 rounded-full blur-xl opacity-60 bg-green-500/40 group-hover:bg-green-400/50 transition"></span>
+
+      {/* Botão */}
+      <span className="relative inline-flex items-center gap-2 rounded-full bg-green-500 px-4 py-3 text-black font-semibold shadow-lg shadow-green-500/30 border border-white/10">
+        {/* Ícone WhatsApp */}
+        <svg viewBox="0 0 32 32" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+          <path d="M19.11 17.38c-.27-.14-1.59-.78-1.84-.87-.25-.09-.43-.14-.61.14s-.7.87-.86 1.05-.32.2-.59.07a7.6 7.6 0 0 1-2.24-1.38 8.38 8.38 0 0 1-1.55-1.92c-.16-.27 0-.42.12-.55s.27-.32.41-.48c.14-.16.18-.27.27-.45s.05-.34 0-.48c-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.46h-.52c-.18 0-.48.07-.73.34s-.96.94-.96 2.29 1 2.66 1.14 2.84 1.98 3.02 4.78 4.23c.67.29 1.2.46 1.61.59.68.22 1.3.19 1.79.12.55-.08 1.59-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32z"/>
+          <path d="M26.77 5.23A12.38 12.38 0 0 0 4.7 23.19L3 29l5.95-1.64A12.38 12.38 0 1 0 26.77 5.23zm-2.11 18.64a9.79 9.79 0 0 1-8.37 1.88l-.2-.06-4.85 1.33 1.31-4.73-.07-.2a9.8 9.8 0 1 1 12.18 1.78z"/>
+        </svg>
+        <span className="hidden sm:inline">Falar no WhatsApp</span>
+      </span>
+
+      {/* Ping sutil */}
+      <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-green-400 animate-ping opacity-60"></span>
+    </a>
+  );
+}
 
 function App() {
   const [category, setCategory] = useState("todos");
@@ -60,6 +97,7 @@ function App() {
       <About />
       <Contact />
       <Footer />
+      <WhatsAppFAB />
     </div>
   );
 }

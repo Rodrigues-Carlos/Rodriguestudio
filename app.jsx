@@ -70,7 +70,7 @@ function WhatsAppFAB() {
       >
         {/* Ícone WhatsApp (SVG completo + block) */}
         <svg
-          viewBox="0 0 24 24"
+          viewBox="0 0 22 22"
           className="h-5 w-5 block"
           fill="currentColor"
           role="img"

@@ -4,7 +4,12 @@ const _cfg = document.getElementById("wa-config");
 const WA_PHONE = (_cfg?.dataset.phone || "5541999592689").replace(/\D/g, "");
 const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
 const WA_UTM   = _cfg?.dataset.utm || "";
-import ReactDOM from "react-dom";
+const WA_ONLY_MOBILE   = (_cfg?.dataset.onlyMobile || "false") === "true";
+const WA_SIDE          = (_cfg?.dataset.side || "right").toLowerCase(); // "right" | "left"
+const WA_OFFSET_BOTTOM = parseInt(_cfg?.dataset.offsetBottom || "20", 10); // px
+const WA_HIDE_ON       = (_cfg?.dataset.hideOn || "").split(",").map(s => s.trim()).filter(Boolean);
+const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase(); // "" | "path" | "path-title"
+const WA_LABEL         = _cfg?.dataset.label || "Falar no WhatsApp";
 
 function WhatsAppFAB() {
   // esconder em rotas específicas (mantém se você já usa)

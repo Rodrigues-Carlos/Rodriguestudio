@@ -484,8 +484,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Films é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
-            em edição de vídeos. Meu foco é unir estética, estratégia e performance.
+            Rodrigues Films é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com mais de 7 anos de experiência no audiovisual. Nosso propósito é transformar ideias em narrativas visuais impactantes, unindo estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
             <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Captação e edição alta resolução</li>

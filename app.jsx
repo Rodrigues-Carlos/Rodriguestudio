@@ -2,7 +2,7 @@ const { useMemo, useState, useEffect } = React;
 const { createRoot } = ReactDOM;
 const _cfg = document.getElementById("wa-config");
 const WA_PHONE = (_cfg?.dataset.phone || "5541995353406").replace(/\D/g, "");
-const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
+const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero aumentar o faturamento da minha empresa.";
 const WA_UTM   = _cfg?.dataset.utm || "";
 const WA_ONLY_MOBILE   = (_cfg?.dataset.onlyMobile || "false") === "true";
 const WA_SIDE          = (_cfg?.dataset.side || "right").toLowerCase(); // "right" | "left"
@@ -193,7 +193,7 @@ function Logo() {
 function Hero() {
   const wa = "5541995353406";
 const msg = encodeURIComponent(
-  "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
+  "Olá, Carlos! Quero aumentar o faturamento da minha empresa."
 );
   return (
     <section id="top" className="relative h-[92vh] w-full overflow-hidden">
@@ -513,7 +513,7 @@ function About() {
 function Contact() {
   const wa = "5541995353406";
   const msg = encodeURIComponent(
-    "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
+    "Olá, Carlos! Quero aumentar o faturamento da minha empresa."
   );
 
   return (

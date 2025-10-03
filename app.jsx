@@ -1,7 +1,7 @@
 const { useMemo, useState, useEffect } = React;
 const { createRoot } = ReactDOM;
 const _cfg = document.getElementById("wa-config");
-const WA_PHONE = (_cfg?.dataset.phone || "5541999592689").replace(/\D/g, "");
+const WA_PHONE = (_cfg?.dataset.phone || "5541995353406").replace(/\D/g, "");
 const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
 const WA_UTM   = _cfg?.dataset.utm || "";
 const WA_ONLY_MOBILE   = (_cfg?.dataset.onlyMobile || "false") === "true";
@@ -191,7 +191,7 @@ function Logo() {
 }
 
 function Hero() {
-  const wa = "5541999592689";
+  const wa = "5541995353406";
 const msg = encodeURIComponent(
   "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
 );
@@ -511,7 +511,7 @@ function About() {
 }
 
 function Contact() {
-  const wa = "5541999592689";
+  const wa = "5541995353406";
   const msg = encodeURIComponent(
     "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
   );

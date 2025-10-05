@@ -26,9 +26,8 @@ function WhatsAppFAB() {
     baseMsg = `${WA_MSG} ${ctx.join(" ")}`.trim();
   }
 
-  const text = encodeURIComponent(baseMsg);
-  const utm  = WA_UTM ? `&${WA_UTM}` : "";
-  const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
+const text = encodeURIComponent(baseMsg);
+const href = `https://api.whatsapp.com/send?phone=${WA_PHONE}&text=${text}&app_absent=0`;
 
   // posição
   const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");

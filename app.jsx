@@ -1,8 +1,8 @@
 const { useMemo, useState, useEffect } = React;
 const { createRoot } = ReactDOM;
 const _cfg = document.getElementById("wa-config");
-const WA_PHONE = (_cfg?.dataset.phone || "5541995353406").replace(/\D/g, "");
-const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero aumentar o faturamento da minha empresa.";
+const WA_PHONE = (_cfg?.dataset.phone || "5541999592689").replace(/\D/g, "");
+const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
 const WA_UTM   = _cfg?.dataset.utm || "";
 const WA_ONLY_MOBILE   = (_cfg?.dataset.onlyMobile || "false") === "true";
 const WA_SIDE          = (_cfg?.dataset.side || "right").toLowerCase(); // "right" | "left"
@@ -26,8 +26,9 @@ function WhatsAppFAB() {
     baseMsg = `${WA_MSG} ${ctx.join(" ")}`.trim();
   }
 
-const text = encodeURIComponent(baseMsg);
-const href = `https://api.whatsapp.com/send?phone=${WA_PHONE}&text=${text}&app_absent=0`;
+  const text = encodeURIComponent(baseMsg);
+  const utm  = WA_UTM ? `&${WA_UTM}` : "";
+  const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
 
   // posição
   const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");
@@ -96,16 +97,16 @@ function App() {
     id: 1,
     title: "Quiz estética",
     cat: "institucional",
-    thumb: "thumbs/quiz-estetica.png",
     url: "https://www.instagram.com/p/DOGfTXpDDXq/",
     ratio: "aspect-[9/16]",
   },
   {
     id: 2,
-    title: "Canal ESTAFERA",
-    cat: "entretenimento",
-    url: "https://www.youtube.com/watch?v=NhFd7FyaFMM&t=15s",
-    ratio: "aspect-video",
+    title: "Se o pix sumisse?",
+    cat: "institucional",
+    thumb: "thumbs/pix.png",
+    url: "conteudo/Dr. Cadu.mp4",
+    ratio: "aspect-[9/16]",
   },
   {
     id: 3,
@@ -183,16 +184,16 @@ function Logo() {
         <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
       </div>
       <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
-        Rodrigues Films
+        Rodrigues Studio
       </span>
     </a>
   );
 }
 
 function Hero() {
-  const wa = "5541995353406";
+  const wa = "5541999592689";
 const msg = encodeURIComponent(
-  "Olá, Carlos! Quero aumentar o faturamento da minha empresa."
+  "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
 );
   return (
     <section id="top" className="relative h-[92vh] w-full overflow-hidden">
@@ -483,7 +484,8 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Films é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com mais de 7 anos de experiência no audiovisual. Nosso propósito é transformar ideias em narrativas visuais impactantes, unindo estética, estratégia e performance.
+            Rodrigues Studio é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
             <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Captação e edição alta resolução</li>
@@ -510,9 +512,9 @@ function About() {
 }
 
 function Contact() {
-  const wa = "5541995353406";
+  const wa = "5541999592689";
   const msg = encodeURIComponent(
-    "Olá, Carlos! Quero aumentar o faturamento da minha empresa."
+    "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
   );
 
   return (
@@ -541,7 +543,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-4 justify-between text-white/60 text-sm">
         <div className="flex items-center gap-3">
           <Logo />
-          <span>© {new Date().getFullYear()} Rodrigues Films. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} Rodrigues Studio. Todos os direitos reservados.</span>
         </div>
         <div className="flex items-center gap-4">
           <a href="#portfolio" className="hover:text-white/90">Portfólio</a>

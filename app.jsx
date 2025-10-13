@@ -184,7 +184,7 @@ function Logo() {
         <span className="absolute -right-3 top-1/2 -translate-y-1/2 text-red-500 text-2xl leading-none">•</span>
       </div>
       <span className="ml-1 text-xs uppercase tracking-[0.25em] text-white/70 group-hover:text-white/90 transition-colors">
-        Rodrigues Studio
+        Rodrigues Films
       </span>
     </a>
   );
@@ -484,7 +484,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Studio é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            Rodrigues Films é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
             em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
@@ -543,7 +543,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center gap-4 justify-between text-white/60 text-sm">
         <div className="flex items-center gap-3">
           <Logo />
-          <span>© {new Date().getFullYear()} Rodrigues Studio. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} Rodrigues Films. Todos os direitos reservados.</span>
         </div>
         <div className="flex items-center gap-4">
           <a href="#portfolio" className="hover:text-white/90">Portfólio</a>

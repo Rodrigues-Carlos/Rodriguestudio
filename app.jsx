@@ -5,18 +5,16 @@ const WA_PHONE = (_cfg?.dataset.phone || "5541995353406").replace(/\D/g, "");
 const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
 const WA_UTM   = _cfg?.dataset.utm || "";
 const WA_ONLY_MOBILE   = (_cfg?.dataset.onlyMobile || "false") === "true";
-const WA_SIDE          = (_cfg?.dataset.side || "right").toLowerCase(); // "right" | "left"
-const WA_OFFSET_BOTTOM = parseInt(_cfg?.dataset.offsetBottom || "20", 10); // px
+const WA_SIDE          = (_cfg?.dataset.side || "right").toLowerCase();
+const WA_OFFSET_BOTTOM = parseInt(_cfg?.dataset.offsetBottom || "20", 10);
 const WA_HIDE_ON       = (_cfg?.dataset.hideOn || "").split(",").map(s => s.trim()).filter(Boolean);
-const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase(); // "" | "path" | "path-title"
+const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase();
 const WA_LABEL         = _cfg?.dataset.label || "Falar no WhatsApp";
 
 function WhatsAppFAB() {
-  // esconder em rotas específicas (mantém se você já usa)
   const path = typeof location !== "undefined" ? location.pathname : "/";
   if (WA_HIDE_ON?.some?.(p => p && path.startsWith(p))) return null;
 
-  // mensagem com contexto (mantém se você já usa)
   let baseMsg = WA_MSG;
   if (WA_INCLUDE_CTX === "path" || WA_INCLUDE_CTX === "path-title") {
     const ctx = [`via ${path}`];
@@ -30,12 +28,10 @@ function WhatsAppFAB() {
   const utm  = WA_UTM ? `&${WA_UTM}` : "";
   const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
 
-  // posição
   const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");
   const bottomStyle = { bottom: `${WA_OFFSET_BOTTOM || 20}px` };
   const mobileOnlyClass = WA_ONLY_MOBILE ? "md:hidden" : "";
 
-  // efeito: pulse sutil 1s a cada 12s (sem criar elemento fora do botão)
   const [pulse, setPulse] = React.useState(false);
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -93,15 +89,23 @@ function App() {
   const [category, setCategory] = useState("todos");
 
   const projects = useMemo(() => [
-  {
+    {
     id: 1,
+    title: "Ganhos com IA",
+    cat: "comercial",
+    thumb: "thumbs/ia.png",
+    url: "conteudo/ads-ia.mp4",
+    ratio: "aspect-video",
+  },
+  {
+    id: 2,
     title: "Quiz estética",
     cat: "institucional",
     url: "https://www.instagram.com/p/DOGfTXpDDXq/",
     ratio: "aspect-[9/16]",
   },
   {
-    id: 2,
+    id: 3,
     title: "Se o pix sumisse?",
     cat: "institucional",
     thumb: "thumbs/pix.png",
@@ -109,7 +113,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 3,
+    id: 4,
     title: "Telas Favretto",
     cat: "comercial",
     thumb: "thumbs/clinica-cliente.png",
@@ -117,14 +121,14 @@ function App() {
     ratio: "aspect-square",
   },
   {
-    id: 4,
+    id: 5,
     title: "Carro",
     cat: "cinematico",
     url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
     ratio: "aspect-video",
   },
   {
-    id: 5,
+    id: 6,
     title: "Moto",
     cat: "cinematico",
     url: "https://www.youtube.com/watch?v=eGM58NmU3oM",

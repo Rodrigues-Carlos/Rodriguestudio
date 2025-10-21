@@ -97,11 +97,12 @@ function App() {
     url: "conteudo/ads-ia.mp4",
     ratio: "aspect-video",
   },
-  {
+   {
     id: 2,
     title: "Quiz estética",
     cat: "institucional",
-    url: "https://www.instagram.com/p/DOGfTXpDDXq/",
+    thumb: "thumbs/quiz-estetica.png",
+    url: "conteudo/quiz.mp4",
     ratio: "aspect-[9/16]",
   },
   {

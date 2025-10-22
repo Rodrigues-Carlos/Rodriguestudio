@@ -26,7 +26,7 @@ function WhatsAppFAB() {
 
   const text = encodeURIComponent(baseMsg);
   const utm  = WA_UTM ? `&${WA_UTM}` : "";
-  const href = `https://api.whatsapp.com/send?phone=${WA_PHONE}&text=${text}${utm}`;
+  const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
   
   const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");
   const bottomStyle = { bottom: `${WA_OFFSET_BOTTOM || 20}px` };

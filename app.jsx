@@ -11,10 +11,18 @@ const WA_HIDE_ON       = (_cfg?.dataset.hideOn || "").split(",").map(s => s.trim
 const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase();
 const WA_LABEL         = _cfg?.dataset.label || "Falar no WhatsApp";
 
+// === Helper: detecta mobile (Android/iOS) ===
+function isMobileUA() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return /android|iphone|ipad|ipod|iemobile|opera mini/i.test(ua);
+}
+
+// === Componente: WhatsAppFAB (versão final) ===
 function WhatsAppFAB() {
   const path = typeof location !== "undefined" ? location.pathname : "/";
   if (WA_HIDE_ON?.some?.(p => p && path.startsWith(p))) return null;
 
+  // Mensagem base + contexto (mantido do seu código)
   let baseMsg = WA_MSG;
   if (WA_INCLUDE_CTX === "path" || WA_INCLUDE_CTX === "path-title") {
     const ctx = [`via ${path}`];
@@ -24,14 +32,18 @@ function WhatsAppFAB() {
     baseMsg = `${WA_MSG} ${ctx.join(" ")}`.trim();
   }
 
-  const text = encodeURIComponent(baseMsg);
-  const utm  = WA_UTM ? `&${WA_UTM}` : "";
-  const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
+  // URL única por plataforma (sem fallback duplo)
+  const encoded = encodeURIComponent(baseMsg);
+  const waUrl = isMobileUA()
+    ? `https://api.whatsapp.com/send?phone=${WA_PHONE}&text=${encoded}`                 // Mobile (app)
+    : `https://web.whatsapp.com/send?phone=${WA_PHONE}&text=${encoded}&app_absent=0`; // Desktop (Web)
 
-  const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");
+  // Classes/estilos
+  const sideClass   = (WA_SIDE === "left" ? "left-5" : "right-5");
   const bottomStyle = { bottom: `${WA_OFFSET_BOTTOM || 20}px` };
   const mobileOnlyClass = WA_ONLY_MOBILE ? "md:hidden" : "";
 
+  // Efeito pulse contido (sem flicker)
   const [pulse, setPulse] = React.useState(false);
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -44,15 +56,21 @@ function WhatsAppFAB() {
 
   const anchor = (
     <a
-      href={href}
+      href={waUrl}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar no WhatsApp"
       title="Abrir conversa no WhatsApp"
       style={bottomStyle}
       className={`${mobileOnlyClass} fixed ${sideClass} z-[9999] group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 rounded-full pointer-events-auto`}
+      onClick={(e) => {
+        // Debounce simples para evitar 429 em cliques repetidos
+        const el = e.currentTarget;
+        el.style.pointerEvents = "none";
+        setTimeout(() => (el.style.pointerEvents = ""), 1200);
+      }}
     >
-      {/* Glow/Aura (fica dentro, não causa scroll) */}
+      {/* Glow/Aura */}
       <span className="absolute inset-0 rounded-full blur-xl opacity-60 bg-green-500/40 group-hover:bg-green-400/50 transition" />
 
       {/* Botão */}
@@ -61,10 +79,10 @@ function WhatsAppFAB() {
           "relative inline-flex items-center gap-2 rounded-full bg-green-500 px-4 py-3",
           "text-black font-semibold shadow-lg shadow-green-500/30 border border-white/10",
           "min-h-[44px]",
-          pulse ? "ring-2 ring-green-300/60" : "" // <- pulse contido (sem flicker)
+          pulse ? "ring-2 ring-green-300/60" : ""
         ].join(" ")}
       >
-        {/* Ícone WhatsApp (SVG completo + block) */}
+        {/* Ícone WhatsApp */}
         <svg
           viewBox="0 0 26 26"
           className="h-5 w-5 block"
@@ -76,15 +94,13 @@ function WhatsAppFAB() {
         </svg>
 
         <span className="hidden sm:inline">{WA_LABEL || "Falar no WhatsApp"}</span>
-
-        {/* Badge de atividade (opcional, dentro do botão) */}
-        {/* <span className="absolute right-1 bottom-1 h-2.5 w-2.5 rounded-full bg-white/70 mix-blend-overlay" /> */}
       </span>
     </a>
   );
+
+  // Portal para fora de wrappers com overflow/transform
   return ReactDOM.createPortal(anchor, document.body);
 }
-
 function App() {
   const [category, setCategory] = useState("todos");
 

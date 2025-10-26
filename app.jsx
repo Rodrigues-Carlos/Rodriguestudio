@@ -97,8 +97,16 @@ function App() {
     url: "conteudo/ads-ia.mp4",
     ratio: "aspect-video",
   },
-  {
+      {
     id: 2,
+    title: "DrifftCar",
+    cat: "comercial",
+    thumb: "thumbs/drifft.png",
+    url: "conteudo/drifftcar.mp4",
+    ratio: "aspect-[9/16]",
+  },
+  {
+    id: 3,
     title: "Quiz estética",
     cat: "institucional",
     thumb: "thumbs/quiz-estetica.png",
@@ -106,7 +114,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 3,
+    id: 4,
     title: "Se o pix sumisse?",
     cat: "institucional",
     thumb: "thumbs/pix.png",
@@ -114,7 +122,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 4,
+    id: 5,
     title: "Telas Favretto",
     cat: "comercial",
     thumb: "thumbs/clinica-cliente.png",
@@ -122,17 +130,10 @@ function App() {
     ratio: "aspect-square",
   },
   {
-    id: 5,
+    id: 6,
     title: "Carro",
     cat: "cinematico",
     url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
-    ratio: "aspect-video",
-  },
-  {
-    id: 6,
-    title: "Moto",
-    cat: "cinematico",
-    url: "https://www.youtube.com/watch?v=eGM58NmU3oM",
     ratio: "aspect-video",
   },
 ], []);

@@ -341,7 +341,40 @@ function Services() {
         <h2 className="text-3xl md:text-4xl font-bold">Serviços</h2>
         <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Solicitar proposta →</a>
       </div>
-      <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  {items.map((p, i) => (
+    <article
+      key={i}
+      className="group relative rounded-3xl border border-white/10 bg-white/5 p-8 
+                 transition-all duration-300 hover:-translate-y-1 
+                 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/10"
+    >
+      {/* Ícone / balão */}
+      <div className="mb-6 inline-flex h-14 w-14 items-center justify-center 
+                      rounded-full bg-red-500/10 text-3xl 
+                      group-hover:bg-red-500 group-hover:text-black transition">
+        {p.icon}
+      </div>
+
+      <h3 className="text-xl font-semibold mb-3">
+        {p.title}
+      </h3>
+
+      <p className="text-sm text-white/70 mb-4">
+        {p.desc}
+      </p>
+
+      <ul className="space-y-2 text-sm text-white/60">
+        {p.bullets.map((b, idx) => (
+          <li key={idx} className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+            {b}
+          </li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</div>
   {items.map((p) => (
     <article
       key={p.id}
@@ -372,7 +405,6 @@ function Services() {
       </div>
     </article>
   ))}
-</div>
     </section>
   );
 }
@@ -403,14 +435,27 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
           );
         })}
       </div>
-      <div className="flex gap-6 overflow-x-auto pb-4">
-  {items.map((p) => (
-    <div
-      key={p.id}
-      onClick={() => p.type === "static" && setLightbox(p)}
-      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 
-                  min-w-[320px] max-w-[520px] cursor-zoom-in ${p.ratio}`}
-    >
+      <div
+  className="
+    grid gap-6
+    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+    max-lg:flex max-lg:overflow-x-auto max-lg:snap-x max-lg:snap-mandatory
+    max-lg:pb-4 no-scrollbar
+  "
+>
+  {items.map(p => (
+  <div
+    key={p.id}
+    onClick={() => p.type === "static" && setLightbox(p)}
+    className={`
+      relative overflow-hidden rounded-2xl border border-white/10 bg-white/5
+      transition-all duration-300
+      hover:-translate-y-1 hover:border-red-500/40 hover:shadow-lg hover:shadow-black/40
+      max-lg:min-w-[85vw] sm:max-lg:min-w-[70vw]
+      cursor-zoom-in
+      ${p.ratio}
+    `}
+  >
       {filter === "video" ? (
         <video
           src={p.url}

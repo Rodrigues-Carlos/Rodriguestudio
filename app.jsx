@@ -27,7 +27,7 @@ function WhatsAppFAB() {
   const text = encodeURIComponent(baseMsg);
   const utm  = WA_UTM ? `&${WA_UTM}` : "";
   const href = `https://wa.me/${WA_PHONE}?text=${text}${utm}`;
-  
+
   const sideClass  = (WA_SIDE === "left" ? "left-5" : "right-5");
   const bottomStyle = { bottom: `${WA_OFFSET_BOTTOM || 20}px` };
   const mobileOnlyClass = WA_ONLY_MOBILE ? "md:hidden" : "";
@@ -86,37 +86,38 @@ function WhatsAppFAB() {
 }
 
 function App() {
-  const [category, setCategory] = useState("todos");
+  const [lightbox, setLightbox] = useState(null);
+  const [filter, setFilter] = useState("video");
 
   const projects = useMemo(() => [
+
     {
     id: 1,
-    title: "Ganhos com IA",
-    cat: "comercial",
-    thumb: "thumbs/ia.png",
-    url: "conteudo/ads-ia.mp4",
+    title: "Ford Bronco",
+    type: "video",
+    url: "conteudo/carro.mp4",
     ratio: "aspect-video",
   },
-      {
-    id: 2,
-    title: "DrifftCar",
-    cat: "comercial",
-    thumb: "thumbs/drifft.png",
-    url: "conteudo/drifftcar.mp4",
-    ratio: "aspect-[9/16]",
-  },
   {
-    id: 3,
+    id: 2,
     title: "Quiz estética",
-    cat: "institucional",
+    type: "video",
     thumb: "thumbs/quiz-estetica.png",
     url: "conteudo/quiz.mp4",
     ratio: "aspect-[9/16]",
   },
   {
+    id: 3,
+    title: "DrifftCar",
+    type: "video",
+    thumb: "thumbs/drifft.png",
+    url: "conteudo/drifftcar.mp4",
+    ratio: "aspect-[9/16]",
+  },
+  {
     id: 4,
     title: "Se o pix sumisse?",
-    cat: "institucional",
+    type: "video",
     thumb: "thumbs/pix.png",
     url: "conteudo/Dr. Cadu.mp4",
     ratio: "aspect-[9/16]",
@@ -124,24 +125,59 @@ function App() {
   {
     id: 5,
     title: "Telas Favretto",
-    cat: "comercial",
+    type: "video",
     thumb: "thumbs/clinica-cliente.png",
     url: "conteudo/Criativo-frevetto.mp4",
     ratio: "aspect-square",
   },
   {
     id: 6,
-    title: "Carro",
-    cat: "cinematico",
-    url: "https://www.youtube.com/watch?v=BPAbjeK8yoY",
+    title: "Melhor Sniper - Warzone",
+    type: "video",
+    url: "conteudo/melhorsniper.mp4",
     ratio: "aspect-video",
+  },
+  {
+    id: 7,
+    title: "Logo Cibersegurança",
+    type: "static",
+    url: "conteudo/Ciberseglogo.jpg",
+    ratio: "aspect-[2.08/1]",
+  },
+  {
+    id: 8,
+    title: "Post Octa + UNI",
+    type: "static",
+    url: "conteudo/UNI.png",
+    ratio: "aspect-[4/1]",
+  },
+  {
+    id: 9,
+    title: "Post GDSun",
+    type: "static",
+    url: "conteudo/postgds.png",
+    ratio: "aspect-[1.91/1]",
+  },
+  {
+    id: 10,
+    title: "Flyer CyberCon",
+    type: "static",
+    url: "conteudo/Cybercon.png",
+    ratio: "aspect-[0.707/1]",
+  },
+  {
+    id: 11,
+    title: "Flyer Calouros",
+    type: "static",
+    url: "conteudo/procura-se.png",
+    ratio: "aspect-[0.707/1]",
   },
 ], []);
 
   const filtered = useMemo(
-    () => (category === "todos" ? projects : projects.filter((p) => p.cat === category)),
-    [category, projects]
-  );
+  () => projects.filter((p) => p.type === filter),
+  [projects, filter]
+);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
@@ -149,12 +185,29 @@ function App() {
       <Hero />
       <BrandsStrip />
       <Services />
-      <Portfolio category={category} setCategory={setCategory} items={filtered} />
+      <Portfolio
+        filter={filter}
+        setFilter={setFilter}
+        items={filtered}
+        setLightbox={setLightbox}
+      />
       <Testimonials />
       <About />
       <Contact />
       <Footer />
       <WhatsAppFAB />
+      {lightbox && (
+  <div
+    className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out"
+    onClick={() => setLightbox(null)}
+  >
+    <img
+      src={lightbox.url}
+      alt={lightbox.title}
+      className="max-w-[95vw] max-h-[90vh] object-contain"
+    />
+  </div>
+)}
     </div>
   );
 }
@@ -288,82 +341,61 @@ function Services() {
         <h2 className="text-3xl md:text-4xl font-bold">Serviços</h2>
         <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Solicitar proposta →</a>
       </div>
-      <div className="grid md:grid-cols-3 gap-6">
-        {items.map((s, i) => (
-          <div
-            key={i}
-            className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-6 hover:border-red-500/60 transition-all"
-          >
-            <div className="text-4xl mb-4">{s.icon}</div>
-            <h3 className="text-xl font-semibold">{s.title}</h3>
-            <p className="mt-2 text-white/70">{s.desc}</p>
-            <ul className="mt-4 space-y-2 text-sm text-white/70">
-              {s.bullets.map((b, j) => (
-                <li key={j} className="flex items-center gap-2">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" /> {b}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar">
+  {items.map((p) => (
+    <article
+      key={p.id}
+      className="min-w-[280px] sm:min-w-[340px] lg:min-w-[420px] snap-start"
+    >
+      <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
+        
+        {p.type === "video" ? (
+          <video
+            src={p.url}
+            poster={p.thumb}
+            className="absolute inset-0 h-full w-full object-cover"
+            controls
+            playsInline
+          />
+        ) : (
+          <img
+            src={p.thumb}
+            alt={p.title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+
+        {/* Overlay */}
+        <div className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/60 to-transparent">
+          <h3 className="text-base font-semibold">{p.title}</h3>
+        </div>
       </div>
+    </article>
+  ))}
+</div>
     </section>
   );
 }
 
-function ytId(u) {
-  try {
-    const url = new URL(u);
-    if (url.hostname.includes("youtu.be")) return url.pathname.slice(1);
-    if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/")[2];
-    if (url.hostname.includes("youtube.com")) return url.searchParams.get("v");
-  } catch {}
-  return null;
-}
-function toEmbed(url) {
-  const id = ytId(url);
-  if (id) return { type: "youtube", src: `https://www.youtube.com/embed/${id}?modestbranding=1&rel=0` };
-  if (/instagram\.com\/p\//.test(url)) {
-    const base = url.split("?")[0].replace(/\/$/, "");
-    return { type: "instagram", src: `${base}/embed` };
-  }
-  if ((url || "").endsWith(".mp4")) return { type: "mp4", src: url };
-  return null;
-}
-function youtubeThumb(u) {
-  const id = ytId(u);
-  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
-}
-
-function Portfolio({ category, setCategory, items }) {
-  const tabs = [
-    { key: "todos",          label: "Todos" },
-    { key: "institucional",  label: "Institucional" },
-    { key: "comercial",      label: "Comercial" },
-    { key: "entretenimento", label: "Entretenimento" },
-    { key: "cinematico",     label: "Cinemático" },
-  ];
+function Portfolio({ filter, setFilter, items, setLightbox }) {
   return (
     <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
-      {/* Filtros */}
-      <div
-        className="mb-8 flex items-center gap-2 overflow-x-auto no-scrollbar"
-        role="tablist"
-        aria-label="Filtrar portfólio por categoria"
-      >
-        {tabs.map((t) => {
-          const active = category === t.key;
+      
+      <div className="mb-8 flex gap-3">
+        {[
+          { key: "video", label: "Vídeos" },
+          { key: "static", label: "Estáticos" },
+        ].map((t) => {
+          const active = filter === t.key;
           return (
             <button
               key={t.key}
-              role="tab"
-              aria-selected={active}
-              onClick={() => setCategory(t.key)}
+              onClick={() => setFilter(t.key)}
               className={[
-                "shrink-0 rounded-full px-4 py-2 text-sm transition-colors border",
+                "rounded-full px-6 py-2 text-sm font-medium transition-all border",
                 active
                   ? "bg-red-600 border-red-500 text-white"
-                  : "bg-black border-white/15 text-white/80 hover:text-white hover:border-red-500/60"
+                  : "border-white/15 text-white/70 hover:border-red-500/60"
               ].join(" ")}
             >
               {t.label}
@@ -371,70 +403,31 @@ function Portfolio({ category, setCategory, items }) {
           );
         })}
       </div>
-
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((p) => (
-          <article key={p.id} className="group">
-            <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-              {(() => {
-                const em = toEmbed(p.url || "");
-                if (em?.type === "youtube") {
-                  return (
-                    <iframe
-                      src={em.src}
-                      title={p.title}
-                      className="absolute inset-0 h-full w-full"
-                      allow="accelerometer; encrypted-media; picture-in-picture; fullscreen"
-                      loading="lazy"
-                    />
-                  );
-                }
-                if (em?.type === "instagram") {
-                  return (
-                    <iframe
-                      src={em.src}
-                      title={p.title}
-                      className="absolute inset-0 h-full w-full bg-black"
-                      loading="lazy"
-                    />
-                  );
-                }
-                if (em?.type === "mp4") {
-                  return (
-                    <video
-                      src={em.src}
-                      poster={p.thumb}
-                      className="absolute inset-0 h-full w-full"
-                      controls
-                      playsInline
-                    />
-                  );
-                }
-                // fallback: capa
-                return (
-                  <img
-                    src={p.thumb || youtubeThumb(p.url) || "https://placehold.co/640x360?text=Prévia"}
-                    alt={p.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                );
-              })()}
-
-              {/* overlay de info */}
-              <div className="pointer-events-none absolute inset-0 flex items-end p-4">
-                <div>
-                  <div className="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-white/70 mb-1">
-                    <span className="h-1 w-1 rounded-full bg-red-500 inline-block" /> {p.cat}
-                  </div>
-                  <h3 className="text-base font-semibold leading-snug drop-shadow">{p.title}</h3>
-                </div>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
+      <div className="flex gap-6 overflow-x-auto pb-4">
+  {items.map((p) => (
+    <div
+      key={p.id}
+      onClick={() => p.type === "static" && setLightbox(p)}
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 
+                  min-w-[320px] max-w-[520px] cursor-zoom-in ${p.ratio}`}
+    >
+      {filter === "video" ? (
+        <video
+          src={p.url}
+          poster={p.thumb}
+          controls
+          className="absolute inset-0 w-full h-full object-contain"
+        />
+      ) : (
+        <img
+          src={p.url}
+          alt={p.title}
+          className="absolute inset-0 w-full h-full object-contain"
+        />
+      )}
+    </div>
+  ))}
+</div>
     </section>
   );
 }

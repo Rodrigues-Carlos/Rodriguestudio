@@ -381,6 +381,22 @@ function Services() {
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [index, setIndex] = useState(0);
+  const getItemsPerPage = () => {
+  if (window.innerWidth >= 1024) return 3; // desktop
+  if (window.innerWidth >= 640) return 2;  // tablet
+  return 1;                                // mobile
+};
+
+const [perPage, setPerPage] = useState(getItemsPerPage());
+
+  useEffect(() => {
+    const onResize = () => {
+      setPerPage(getItemsPerPage());
+      setIndex(0);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     setIndex(0);

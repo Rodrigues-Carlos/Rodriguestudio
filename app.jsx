@@ -375,44 +375,23 @@ function Services() {
     </article>
   ))}
 </div>
-  {items.map((p) => (
-    <article
-      key={p.id}
-      className="min-w-[280px] sm:min-w-[340px] lg:min-w-[420px] snap-start"
-    >
-      <div className={`${p.ratio} relative overflow-hidden rounded-2xl border border-white/10 bg-white/5`}>
-        
-        {p.type === "video" ? (
-          <video
-            src={p.url}
-            poster={p.thumb}
-            className="absolute inset-0 h-full w-full object-cover"
-            controls
-            playsInline
-          />
-        ) : (
-          <img
-            src={p.thumb}
-            alt={p.title}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-
-        {/* Overlay */}
-        <div className="absolute inset-0 flex items-end p-4 bg-gradient-to-t from-black/60 to-transparent">
-          <h3 className="text-base font-semibold">{p.title}</h3>
-        </div>
-      </div>
-    </article>
-  ))}
     </section>
   );
 }
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [filter]);
+
   return (
-    <section id="portfolio" className="max-w-7xl mx-auto px-6 py-20">
-      
+    <section className="max-w-7xl mx-auto px-6 py-20">
+      <div className="flex items-end justify-between gap-6 mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
+      </div>
+
       <div className="mb-8 flex gap-3">
         {[
           { key: "video", label: "Vídeos" },
@@ -435,44 +414,52 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
           );
         })}
       </div>
-      <div
-  className="
-    grid gap-6
-    grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-    max-lg:flex max-lg:overflow-x-auto max-lg:snap-x max-lg:snap-mandatory
-    max-lg:pb-4 no-scrollbar
-  "
->
-  {items.map(p => (
-  <div
-    key={p.id}
-    onClick={() => p.type === "static" && setLightbox(p)}
-    className={`
-      relative overflow-hidden rounded-2xl border border-white/10 bg-white/5
-      transition-all duration-300
-      hover:-translate-y-1 hover:border-red-500/40 hover:shadow-lg hover:shadow-black/40
-      max-lg:min-w-[85vw] sm:max-lg:min-w-[70vw]
-      cursor-zoom-in
-      ${p.ratio}
-    `}
-  >
-      {filter === "video" ? (
-        <video
-          src={p.url}
-          poster={p.thumb}
-          controls
-          className="absolute inset-0 w-full h-full object-contain"
-        />
-      ) : (
-        <img
-          src={p.url}
-          alt={p.title}
-          className="absolute inset-0 w-full h-full object-contain"
-        />
-      )}
-    </div>
-  ))}
-</div>
+
+      <div className="relative overflow-hidden">
+        <div
+          className="flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {items.map((p) => (
+            <div key={p.id} className="w-full flex-shrink-0 px-2">
+              <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                {filter === "video" ? (
+                  <video
+                    src={p.url}
+                    controls
+                    className="absolute inset-0 w-full h-full object-contain"
+                  />
+                ) : (
+                  <img
+                    src={p.url}
+                    alt={p.title}
+                    className="absolute inset-0 w-full h-full object-contain"
+                    onClick={() => setLightbox(p)}
+                  />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={() => setIndex(i => Math.max(i - 1, 0))}
+          className="absolute left-2 top-1/2 -translate-y-1/2
+                     bg-black/60 hover:bg-black text-white
+                     rounded-full w-10 h-10 flex items-center justify-center"
+        >
+          ‹
+        </button>
+
+        <button
+          onClick={() => setIndex(i => Math.min(i + 1, items.length - 1))}
+          className="absolute right-2 top-1/2 -translate-y-1/2
+                     bg-black/60 hover:bg-black text-white
+                     rounded-full w-10 h-10 flex items-center justify-center"
+        >
+          ›
+        </button>
+      </div>
     </section>
   );
 }

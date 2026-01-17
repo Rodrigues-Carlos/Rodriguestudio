@@ -432,33 +432,35 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
       </div>
 
       <div className="relative overflow-hidden">
-        <div
-          className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
-        >
+              <div
+        className="flex transition-transform duration-500 ease-out"
+        style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
+      >
           {items.map((p) => (
-            <div
-style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
+  <div
+    key={p.id}
+    className="flex-shrink-0 px-2"
+    style={{ width: `${100 / perPage}%` }}
+  >
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] sm:h-[300px] lg:h-[320px]">
+      {filter === "video" ? (
+        <video
+          src={p.url}
+          controls
+          className="absolute inset-0 w-full h-full object-contain"
+        />
+      ) : (
+        <img
+          src={p.url}
+          alt={p.title}
+          className="absolute inset-0 w-full h-full object-contain"
+          onClick={() => setLightbox(p)}
+        />
+      )}
+    </div>
+  </div>
+))}
 
->
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] sm:h-[300px] lg:h-[320px]">
-                {filter === "video" ? (
-                  <video
-                    src={p.url}
-                    controls
-                    className="absolute inset-0 w-full h-full object-contain"
-                  />
-                ) : (
-                  <img
-                    src={p.url}
-                    alt={p.title}
-                    className="absolute inset-0 w-full h-full object-contain"
-                    onClick={() => setLightbox(p)}
-                  />
-                )}
-              </div>
-            </div>
-          ))}
         </div>
 
         <button

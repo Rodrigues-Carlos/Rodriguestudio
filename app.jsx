@@ -336,7 +336,7 @@ function Services() {
   ];
 
   return (
-    <section id="servicos" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="servicos" className="max-w-7xl mx-auto px-6 pt-20 pb-10">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Serviços</h2>
         <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Solicitar proposta →</a>
@@ -403,7 +403,7 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
   }, [filter]);
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20">
+    <section className="max-w-7xl mx-auto px-6 pt-10 pb-20">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
       </div>
@@ -434,10 +434,14 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
       <div className="relative overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${index * 100}%)` }}
+          style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
         >
           {items.map((p) => (
-            <div key={p.id} className="w-full flex-shrink-0 px-2">
+            <div
+  key={p.id}
+  className="flex-shrink-0 px-2"
+  style={{ width: `${100 / perPage}%` }}
+>
               <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-white/5">
                 {filter === "video" ? (
                   <video
@@ -468,7 +472,7 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
         </button>
 
         <button
-          onClick={() => setIndex(i => Math.min(i + 1, items.length - 1))}
+          onClick={() => setIndex(i => Math.min(i + 1, Math.ceil(items.length / perPage) - 1))}
           className="absolute right-2 top-1/2 -translate-y-1/2
                      bg-black/60 hover:bg-black text-white
                      rounded-full w-10 h-10 flex items-center justify-center"

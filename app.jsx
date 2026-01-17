@@ -95,6 +95,7 @@ function App() {
     id: 1,
     title: "Ford Bronco",
     type: "video",
+    thumb: "thumbs/bronco.jpg",
     url: "conteudo/carro.mp4",
     ratio: "aspect-video",
   },
@@ -438,6 +439,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                     {filter === "video" ? (
                       <video
                         src={p.url}
+                        poster={p.thumb}
                         controls
                         playsInline
                         preload="metadata"
@@ -459,23 +461,31 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
           ))}
         </div>
 
-        <button
+                <button
           onClick={() => setPage(p => Math.max(p - 1, 0))}
-          className="absolute left-2 top-1/2 -translate-y-1/2
-                     bg-black/60 hover:bg-black text-white
-                     rounded-full w-10 h-10 flex items-center justify-center"
+          className="absolute left-3 top-1/2 -translate-y-1/2
+                    bg-red-500/20 text-red-400
+                    hover:bg-red-500/40 hover:text-white
+                    backdrop-blur-md
+                    rounded-full w-11 h-11 flex items-center justify-center
+                    transition-all shadow-lg shadow-red-500/20"
         >
           ‹
         </button>
 
-        <button
+
+                <button
           onClick={() => setPage(p => Math.min(p + 1, pages.length - 1))}
-          className="absolute right-2 top-1/2 -translate-y-1/2
-                     bg-black/60 hover:bg-black text-white
-                     rounded-full w-10 h-10 flex items-center justify-center"
+          className="absolute right-3 top-1/2 -translate-y-1/2
+                    bg-red-500/20 text-red-400
+                    hover:bg-red-500/40 hover:text-white
+                    backdrop-blur-md
+                    rounded-full w-11 h-11 flex items-center justify-center
+                    transition-all shadow-lg shadow-red-500/20"
         >
           ›
         </button>
+
       </div>
     </section>
   );

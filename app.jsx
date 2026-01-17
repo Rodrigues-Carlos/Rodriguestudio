@@ -438,11 +438,10 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
         >
           {items.map((p) => (
             <div
-  key={p.id}
-  className="flex-shrink-0 px-2"
-  style={{ width: `${100 / perPage}%` }}
+style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
+
 >
-              <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] sm:h-[300px] lg:h-[320px]">
                 {filter === "video" ? (
                   <video
                     src={p.url}

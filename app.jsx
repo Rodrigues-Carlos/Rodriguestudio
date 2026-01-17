@@ -380,30 +380,21 @@ function Services() {
 }
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
-  const [index, setIndex] = useState(0);
-  const getItemsPerPage = () => {
-  if (window.innerWidth >= 1024) return 3; // desktop
-  if (window.innerWidth >= 640) return 2;  // tablet
-  return 1;                                // mobile
-};
+  const [page, setPage] = useState(0);
 
-const [perPage, setPerPage] = useState(getItemsPerPage());
+  const ITEMS_PER_PAGE = 3; // sempre 3 no desktop
 
-  useEffect(() => {
-    const onResize = () => {
-      setPerPage(getItemsPerPage());
-      setIndex(0);
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const pages = [];
+  for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
+    pages.push(items.slice(i, i + ITEMS_PER_PAGE));
+  }
 
   useEffect(() => {
-    setIndex(0);
+    setPage(0);
   }, [filter]);
 
   return (
-    <section className="max-w-7xl mx-auto px-6 pt-10 pb-20">
+    <section id="portfolio" className="max-w-7xl mx-auto px-6 pt-10 pb-20">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
       </div>
@@ -432,39 +423,44 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
       </div>
 
       <div className="relative overflow-hidden">
-              <div
-        className="flex transition-transform duration-500 ease-out"
-        style={{ transform: `translateX(-${index * (100 / perPage)}%)` }}
-      >
-          {items.map((p) => (
-  <div
-    key={p.id}
-    className="flex-shrink-0 px-2"
-    style={{ width: `${100 / perPage}%` }}
-  >
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] sm:h-[300px] lg:h-[320px]">
-      {filter === "video" ? (
-        <video
-          src={p.url}
-          controls
-          className="absolute inset-0 w-full h-full object-contain"
-        />
-      ) : (
-        <img
-          src={p.url}
-          alt={p.title}
-          className="absolute inset-0 w-full h-full object-contain"
-          onClick={() => setLightbox(p)}
-        />
-      )}
-    </div>
-  </div>
-))}
+        <div
+          className="flex transition-transform duration-500 ease-out"
+          style={{ transform: `translateX(-${page * 100}%)` }}
+        >
+          {pages.map((group, i) => (
+            <div key={i} className="w-full flex-shrink-0 px-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {group.map((p) => (
+                  <div
+                    key={p.id}
+                    className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] md:h-[300px]"
+                  >
+                    {filter === "video" ? (
+                      <video
+                        src={p.url}
+                        controls
+                        playsInline
+                        preload="metadata"
+                        className="absolute inset-0 w-full h-full object-contain"
+                      />
+                    ) : (
 
+                      <img
+                        src={p.url}
+                        alt={p.title}
+                        className="absolute inset-0 w-full h-full object-contain cursor-zoom-in"
+                        onClick={() => setLightbox(p)}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         <button
-          onClick={() => setIndex(i => Math.max(i - 1, 0))}
+          onClick={() => setPage(p => Math.max(p - 1, 0))}
           className="absolute left-2 top-1/2 -translate-y-1/2
                      bg-black/60 hover:bg-black text-white
                      rounded-full w-10 h-10 flex items-center justify-center"
@@ -473,7 +469,7 @@ const [perPage, setPerPage] = useState(getItemsPerPage());
         </button>
 
         <button
-          onClick={() => setIndex(i => Math.min(i + 1, Math.ceil(items.length / perPage) - 1))}
+          onClick={() => setPage(p => Math.min(p + 1, pages.length - 1))}
           className="absolute right-2 top-1/2 -translate-y-1/2
                      bg-black/60 hover:bg-black text-white
                      rounded-full w-10 h-10 flex items-center justify-center"
@@ -536,7 +532,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Films é dirigido por <span className="text-white">Carlos Edaurdo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            Rodrigues Films é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 7 anos de experiência
             em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">

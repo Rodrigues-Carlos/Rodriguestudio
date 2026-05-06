@@ -542,7 +542,7 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Films é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 7 anos de experiência
+            Rodrigues Films é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 3 anos de experiência
             em edição de vídeos. Meu foco é unir estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">

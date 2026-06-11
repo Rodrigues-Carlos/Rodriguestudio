@@ -109,6 +109,13 @@ function App() {
   },
   {
     id: 3,
+    title: "Maçanete Hafele",
+    type: "video",
+    url: "conteudo/hafele.mp4",
+    ratio: "aspect-[9/16]",
+  },
+  {
+    id: 4,
     title: "DrifftCar",
     type: "video",
     thumb: "thumbs/drifft.png",
@@ -116,7 +123,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 4,
+    id: 5,
     title: "Se o pix sumisse?",
     type: "video",
     thumb: "thumbs/pix.png",
@@ -124,7 +131,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 5,
+    id: 6,
     title: "Telas Favretto",
     type: "video",
     thumb: "thumbs/clinica-cliente.png",
@@ -132,45 +139,52 @@ function App() {
     ratio: "aspect-square",
   },
   {
-    id: 6,
+    id: 7,
     title: "Melhor Sniper - Warzone",
     type: "video",
     url: "conteudo/melhorsniper.mp4",
     ratio: "aspect-video",
   },
   {
-    id: 7,
+    id: 8,
     title: "Logo Cibersegurança",
     type: "static",
     url: "conteudo/Ciberseglogo.jpg",
     ratio: "aspect-[2.08/1]",
   },
   {
-    id: 8,
+    id: 9,
     title: "Post Octa + UNI",
     type: "static",
     url: "conteudo/UNI.png",
     ratio: "aspect-[4/1]",
   },
   {
-    id: 9,
+    id:109,
     title: "Post GDSun",
     type: "static",
     url: "conteudo/postgds.png",
     ratio: "aspect-[1.91/1]",
   },
   {
-    id: 10,
-    title: "Flyer CyberCon",
+    id: 11,
+    title: "Flyer Octacore",
     type: "static",
-    url: "conteudo/Cybercon.png",
+    url: "conteudo/diretoria.png",
     ratio: "aspect-[0.707/1]",
   },
   {
-    id: 11,
+    id: 12,
     title: "Flyer Calouros",
     type: "static",
     url: "conteudo/procura-se.png",
+    ratio: "aspect-[0.707/1]",
+  },
+  {
+    id: 13,
+    title: "Flyer CyberCon",
+    type: "static",
+    url: "conteudo/Cybercon.png",
     ratio: "aspect-[0.707/1]",
   },
 ], []);
@@ -399,12 +413,15 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
       </div>
+      <div className="text-sm text-white/50">
+         {page + 1} / {pages.length}
+      </div>
 
       <div className="mb-8 flex gap-3">
         {[
-          { key: "video", label: "Vídeos" },
-          { key: "static", label: "Estáticos" },
-        ].map((t) => {
+             { key: "video", label: `Vídeos (${projects.filter(p => p.type === "video").length})` },
+              { key: "static", label: `Design (${projects.filter(p => p.type === "static").length})` },
+              ].map((t) => {
           const active = filter === t.key;
           return (
             <button
@@ -424,12 +441,15 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       </div>
 
       <div className="relative overflow-hidden">
+      <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-32 bg-gradient-to-l from-black to-transparent" />
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {pages.map((group, i) => (
-            <div key={i} className="w-full flex-shrink-0 px-2">
+            <div
+              key={i}
+              className="w-[85%] md:w-[82%] flex-shrink-0 px-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {group.map((p) => (
                   <div
@@ -463,25 +483,26 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
                 <button
           onClick={() => setPage(p => Math.max(p - 1, 0))}
-          className="absolute left-3 top-1/2 -translate-y-1/2
-                    bg-red-500/20 text-red-400
-                    hover:bg-red-500/40 hover:text-white
-                    backdrop-blur-md
-                    rounded-full w-11 h-11 flex items-center justify-center
-                    transition-all shadow-lg shadow-red-500/20"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30
+           bg-black/60 text-white/70
+           hover:bg-black/80 hover:text-white
+           border border-white/10
+           backdrop-blur-md
+           rounded-full w-12 h-12 flex items-center justify-center
+           transition-all"
         >
           ‹
         </button>
 
 
                 <button
-          onClick={() => setPage(p => Math.min(p + 1, pages.length - 1))}
-          className="absolute right-3 top-1/2 -translate-y-1/2
-                    bg-red-500/20 text-red-400
-                    hover:bg-red-500/40 hover:text-white
-                    backdrop-blur-md
-                    rounded-full w-11 h-11 flex items-center justify-center
-                    transition-all shadow-lg shadow-red-500/20"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30
+           bg-black/60 text-white/70
+           hover:bg-black/80 hover:text-white
+           border border-white/10
+           backdrop-blur-md
+           rounded-full w-12 h-12 flex items-center justify-center
+           transition-all"
         >
           ›
         </button>

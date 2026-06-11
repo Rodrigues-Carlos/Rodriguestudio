@@ -441,8 +441,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       </div>
 
       <div className="relative overflow-hidden">
-      <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-32 bg-gradient-to-l from-black to-transparent" />
-        <div
+      <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${page * 100}%)` }}
         >

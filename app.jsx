@@ -419,8 +419,8 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
       <div className="mb-8 flex gap-3">
         {[
-             { key: "video", label: `Vídeos (${projects.filter(p => p.type === "video").length})` },
-              { key: "static", label: `Design (${projects.filter(p => p.type === "static").length})` },
+              { key: "video", label: "Vídeos" },
+              { key: "static", label: "Design" },
               ].map((t) => {
           const active = filter === t.key;
           return (

@@ -397,7 +397,7 @@ function Services() {
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
 
-  const ITEMS_PER_PAGE = 3; // sempre 3 no desktop
+  const ITEMS_PER_PAGE = 2;
 
   const pages = [];
   for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
@@ -419,7 +419,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
       <div className="mb-8 flex gap-3">
         {[
-              { key: "video", label: "Vídeos" },
+             { key: "video", label: "Vídeos" },
               { key: "static", label: "Design" },
               ].map((t) => {
           const active = filter === t.key;
@@ -449,7 +449,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
             <div
               key={i}
               className="w-[85%] md:w-[82%] flex-shrink-0 px-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {group.map((p) => (
                   <div
                     key={p.id}

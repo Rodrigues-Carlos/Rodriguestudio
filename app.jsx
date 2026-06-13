@@ -188,7 +188,6 @@ function App() {
     ratio: "aspect-[0.707/1]",
   },
 ], []);
-
   const filtered = useMemo(
   () => projects.filter((p) => p.type === filter),
   [projects, filter]
@@ -397,7 +396,7 @@ function Services() {
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
 
-  const ITEMS_PER_PAGE = 2;
+  const ITEMS_PER_PAGE = 3; // sempre 3 no desktop
 
   const pages = [];
   for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
@@ -413,15 +412,12 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
       </div>
-      <div className="text-sm text-white/50">
-         {page + 1} / {pages.length}
-      </div>
 
       <div className="mb-8 flex gap-3">
         {[
-             { key: "video", label: "Vídeos" },
-              { key: "static", label: "Design" },
-              ].map((t) => {
+          { key: "video", label: "Vídeos" },
+          { key: "static", label: "Estáticos" },
+        ].map((t) => {
           const active = filter === t.key;
           return (
             <button
@@ -441,15 +437,13 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       </div>
 
       <div className="relative overflow-hidden">
-      <div
+        <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${page * 100}%)` }}
         >
           {pages.map((group, i) => (
-            <div
-              key={i}
-              className="w-[85%] md:w-[82%] flex-shrink-0 px-2">
-              <div className="grid grid-cols-1 gap-4">
+            <div key={i} className="w-full flex-shrink-0 px-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {group.map((p) => (
                   <div
                     key={p.id}
@@ -482,26 +476,25 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
                 <button
           onClick={() => setPage(p => Math.max(p - 1, 0))}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30
-           bg-black/60 text-white/70
-           hover:bg-black/80 hover:text-white
-           border border-white/10
-           backdrop-blur-md
-           rounded-full w-12 h-12 flex items-center justify-center
-           transition-all"
+          className="absolute left-3 top-1/2 -translate-y-1/2
+                    bg-red-500/20 text-red-400
+                    hover:bg-red-500/40 hover:text-white
+                    backdrop-blur-md
+                    rounded-full w-11 h-11 flex items-center justify-center
+                    transition-all shadow-lg shadow-red-500/20"
         >
           ‹
         </button>
 
 
                 <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30
-           bg-black/60 text-white/70
-           hover:bg-black/80 hover:text-white
-           border border-white/10
-           backdrop-blur-md
-           rounded-full w-12 h-12 flex items-center justify-center
-           transition-all"
+          onClick={() => setPage(p => Math.min(p + 1, pages.length - 1))}
+          className="absolute right-3 top-1/2 -translate-y-1/2
+                    bg-red-500/20 text-red-400
+                    hover:bg-red-500/40 hover:text-white
+                    backdrop-blur-md
+                    rounded-full w-11 h-11 flex items-center justify-center
+                    transition-all shadow-lg shadow-red-500/20"
         >
           ›
         </button>

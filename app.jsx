@@ -1,5 +1,7 @@
-const { useMemo, useState, useEffect } = React;
-const { createRoot } = ReactDOM;
+import React, { useMemo, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
+
 const _cfg = document.getElementById("wa-config");
 const WA_PHONE = (_cfg?.dataset.phone || "5541995353406").replace(/\D/g, "");
 const WA_MSG   = _cfg?.dataset.msg || "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?.";
@@ -32,8 +34,8 @@ function WhatsAppFAB() {
   const bottomStyle = { bottom: `${WA_OFFSET_BOTTOM || 20}px` };
   const mobileOnlyClass = WA_ONLY_MOBILE ? "md:hidden" : "";
 
-  const [pulse, setPulse] = React.useState(false);
-  React.useEffect(() => {
+  const [pulse, setPulse] = useState(false);
+  useEffect(() => {
     const id = setInterval(() => {
       setPulse(true);
       const t = setTimeout(() => setPulse(false), 1000);
@@ -82,7 +84,7 @@ function WhatsAppFAB() {
       </span>
     </a>
   );
-  return ReactDOM.createPortal(anchor, document.body);
+  return createPortal(anchor, document.body);
 }
 
 function App() {
@@ -444,31 +446,45 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
           {pages.map((group, i) => (
             <div key={i} className="w-full flex-shrink-0 px-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {group.map((p) => (
-                  <div
-                    key={p.id}
-                    className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] md:h-[300px]"
-                  >
-                    {filter === "video" ? (
-                      <video
-                        src={p.url}
-                        poster={p.thumb}
-                        controls
-                        playsInline
-                        preload="metadata"
-                        className="absolute inset-0 w-full h-full object-contain"
-                      />
-                    ) : (
+                {group.map((p) => {
+                  const hasPoster = Boolean(p.thumb);
 
-                      <img
-                        src={p.url}
-                        alt={p.title}
-                        className="absolute inset-0 w-full h-full object-contain cursor-zoom-in"
-                        onClick={() => setLightbox(p)}
-                      />
-                    )}
-                  </div>
-                ))}
+                  return (
+                    <div
+                      key={p.id}
+                      className="relative overflow-hidden rounded-2xl border border-white/10 bg-neutral-950 h-[260px] md:h-[300px]"
+                    >
+                      {filter === "video" ? (
+                        <>
+                          <video
+                            src={p.url}
+                            poster={p.thumb}
+                            controls
+                            playsInline
+                            preload="metadata"
+                            className="absolute inset-0 w-full h-full object-contain"
+                          />
+                          {!hasPoster && (
+                            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.22),rgba(0,0,0,0.82)_62%)] px-6 text-center">
+                              <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-white/10 text-2xl text-white/90">
+                                ▶
+                              </span>
+                              <span className="text-sm font-semibold text-white/85">{p.title}</span>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+
+                        <img
+                          src={p.url}
+                          alt={p.title}
+                          className="absolute inset-0 w-full h-full object-contain cursor-zoom-in"
+                          onClick={() => setLightbox(p)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}

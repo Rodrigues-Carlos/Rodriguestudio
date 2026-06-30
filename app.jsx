@@ -109,6 +109,16 @@ function App() {
   },
   {
     id: 3,
+<<<<<<< Updated upstream
+=======
+    title: "Motion Hafele",
+    type: "video",
+    url: "conteudo/Motion%20Hafele.mp4",
+    ratio: "aspect-video",
+  },
+  {
+    id: 4,
+>>>>>>> Stashed changes
     title: "DrifftCar",
     type: "video",
     thumb: "thumbs/drifft.png",
@@ -142,6 +152,7 @@ function App() {
     id: 7,
     title: "Logo Cibersegurança",
     type: "static",
+<<<<<<< Updated upstream
     url: "conteudo/Ciberseglogo.jpg",
     ratio: "aspect-[2.08/1]",
   },
@@ -151,6 +162,10 @@ function App() {
     type: "static",
     url: "conteudo/UNI.png",
     ratio: "aspect-[4/1]",
+=======
+    url: "conteudo/Flyer%20Octacore.png",
+    ratio: "aspect-[0.707/1]",
+>>>>>>> Stashed changes
   },
   {
     id: 9,
@@ -398,8 +413,20 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     if (!items.length) return [];
     return usePeekCarousel ? [items[items.length - 1], ...items, items[0]] : items;
   }, [items, usePeekCarousel]);
+<<<<<<< Updated upstream
   const activeIndex = usePeekCarousel ? page + 1 : page;
   const maxPage = isDesktopCarousel && !usePeekCarousel
+=======
+  const mobileVideoItems = useMemo(() => {
+    if (!isMobileVideoList || !items.length) return [];
+    const start = page;
+    return [0, 1, 2].map((offset) => items[(start + offset) % items.length]);
+  }, [isMobileVideoList, items, page]);
+  const activeIndex = usePeekCarousel ? page + 1 : page;
+  const maxPage = isMobileVideoList
+    ? Math.max(items.length - 1, 0)
+    : isDesktopCarousel && !usePeekCarousel
+>>>>>>> Stashed changes
     ? Math.max(items.length - 3, 0)
     : Math.max(items.length - 1, 0);
 

@@ -382,6 +382,7 @@ function Services() {
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
+  const [isDesktopCarousel, setIsDesktopCarousel] = useState(false);
   const [carouselMetrics, setCarouselMetrics] = useState({
     viewport: 0,
     card: 0,
@@ -392,16 +393,31 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   const firstCardRef = useRef(null);
 
   const isVideo = filter === "video";
+  const usePeekCarousel = isVideo || !isDesktopCarousel;
   const carouselItems = useMemo(() => {
     if (!items.length) return [];
-    return [items[items.length - 1], ...items, items[0]];
-  }, [items]);
-  const activeIndex = page + 1;
-  const maxPage = Math.max(items.length - 1, 0);
+    return usePeekCarousel ? [items[items.length - 1], ...items, items[0]] : items;
+  }, [items, usePeekCarousel]);
+  const activeIndex = usePeekCarousel ? page + 1 : page;
+  const maxPage = isDesktopCarousel && !usePeekCarousel
+    ? Math.max(items.length - 3, 0)
+    : Math.max(items.length - 1, 0);
 
   useEffect(() => {
     setPage(0);
   }, [filter]);
+
+  useEffect(() => {
+    setPage((p) => Math.min(p, maxPage));
+  }, [maxPage]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktopCarousel(media.matches);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
+  }, []);
 
   useEffect(() => {
     const measure = () => {
@@ -422,13 +438,21 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, [carouselItems.length]);
+  }, [carouselItems.length, isDesktopCarousel]);
 
   const carouselTranslate = (() => {
     const { viewport, card, gap } = carouselMetrics;
     if (!card) return 0;
 
     const step = card + gap;
+    if (isDesktopCarousel && isVideo) {
+      return -card / 2 - (activeIndex - 1) * step;
+    }
+
+    if (isDesktopCarousel) {
+      return -activeIndex * step;
+    }
+
     return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
@@ -479,7 +503,12 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
             <div
               ref={index === 0 ? firstCardRef : null}
               key={`${p.id}-${index}`}
-              className="relative h-[260px] w-[50%] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]"
+              className={[
+                "relative h-[260px] w-[50%] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]",
+                isVideo
+                  ? "md:w-[calc((100%_-_48px)/3.5)]"
+                  : "md:w-[calc((100%_-_32px)/3)]"
+              ].join(" ")}
             >
               {isVideo ? (
                 <video

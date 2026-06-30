@@ -382,7 +382,6 @@ function Services() {
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
-  const [isMobileCarousel, setIsMobileCarousel] = useState(false);
   const [carouselMetrics, setCarouselMetrics] = useState({
     viewport: 0,
     card: 0,
@@ -393,41 +392,18 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   const firstCardRef = useRef(null);
 
   const isVideo = filter === "video";
-  const ITEMS_PER_PAGE = 3;
-
-  const pages = [];
-  for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
-    pages.push(items.slice(i, i + ITEMS_PER_PAGE));
-  }
-
-  const videoItems = useMemo(() => {
-    if (!isVideo || !items.length) return [];
-    return isMobileCarousel ? [items[items.length - 1], ...items, items[0]] : items;
-  }, [isVideo, items, isMobileCarousel]);
-
-  const activeVideoIndex = isMobileCarousel ? page + 1 : page;
-  const maxDesktopPage = Math.max(items.length - 3, 0);
-  const maxPage = isVideo
-    ? isMobileCarousel
-      ? Math.max(items.length - 1, 0)
-      : maxDesktopPage
-    : Math.max(pages.length - 1, 0);
+  const carouselItems = useMemo(() => {
+    if (!items.length) return [];
+    return [items[items.length - 1], ...items, items[0]];
+  }, [items]);
+  const activeIndex = page + 1;
+  const maxPage = Math.max(items.length - 1, 0);
 
   useEffect(() => {
     setPage(0);
   }, [filter]);
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const update = () => setIsMobileCarousel(media.matches);
-    update();
-    media.addEventListener?.("change", update);
-    return () => media.removeEventListener?.("change", update);
-  }, []);
-
-  useEffect(() => {
-    if (!isVideo) return;
-
     const measure = () => {
       const viewport = viewportRef.current;
       const track = trackRef.current;
@@ -446,36 +422,22 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, [isVideo, videoItems.length, isMobileCarousel]);
+  }, [carouselItems.length]);
 
-  const videoTranslate = (() => {
+  const carouselTranslate = (() => {
     const { viewport, card, gap } = carouselMetrics;
     if (!card) return 0;
 
     const step = card + gap;
-    if (isMobileCarousel) {
-      return viewport / 2 - card / 2 - activeVideoIndex * step;
-    }
-
-    return -page * step;
+    return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
   const goPrevious = () => {
-    if (isVideo) {
-      setPage((p) => (p <= 0 ? maxPage : p - 1));
-      return;
-    }
-
-    setPage((p) => Math.max(p - 1, 0));
+    setPage((p) => (p <= 0 ? maxPage : p - 1));
   };
 
   const goNext = () => {
-    if (isVideo) {
-      setPage((p) => (p >= maxPage ? 0 : p + 1));
-      return;
-    }
-
-    setPage((p) => Math.min(p + 1, maxPage));
+    setPage((p) => (p >= maxPage ? 0 : p + 1));
   };
 
   return (
@@ -508,18 +470,18 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       </div>
 
       <div ref={viewportRef} className="relative overflow-hidden">
-        {isVideo ? (
-          <div
-            ref={trackRef}
-            className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"
-            style={{ transform: `translateX(${videoTranslate}px)` }}
-          >
-            {videoItems.map((p, index) => (
-              <div
-                ref={index === 0 ? firstCardRef : null}
-                key={`${p.id}-${index}`}
-                className="relative h-[260px] w-[50%] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[300px] md:w-[calc((100%_-_48px)/3.18)]"
-              >
+        <div
+          ref={trackRef}
+          className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"
+          style={{ transform: `translateX(${carouselTranslate}px)` }}
+        >
+          {carouselItems.map((p, index) => (
+            <div
+              ref={index === 0 ? firstCardRef : null}
+              key={`${p.id}-${index}`}
+              className="relative h-[260px] w-[50%] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]"
+            >
+              {isVideo ? (
                 <video
                   src={p.url}
                   poster={p.thumb}
@@ -528,35 +490,17 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                   preload="metadata"
                   className="absolute inset-0 h-full w-full object-contain"
                 />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div
-            className="flex transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${page * 100}%)` }}
-          >
-            {pages.map((group, i) => (
-              <div key={i} className="w-full flex-shrink-0 px-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {group.map((p) => (
-                    <div
-                      key={p.id}
-                      className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 h-[260px] md:h-[300px]"
-                    >
-                      <img
-                        src={p.url}
-                        alt={p.title}
-                        className="absolute inset-0 w-full h-full object-contain cursor-zoom-in"
-                        onClick={() => setLightbox(p)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ) : (
+                <img
+                  src={p.url}
+                  alt={p.title}
+                  className="absolute inset-0 h-full w-full cursor-zoom-in object-contain"
+                  onClick={() => setLightbox(p)}
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
                 <button
           onClick={goPrevious}

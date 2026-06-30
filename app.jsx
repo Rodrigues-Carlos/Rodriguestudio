@@ -453,6 +453,10 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       return -activeIndex * step;
     }
 
+    if (!isVideo) {
+      return -activeIndex * step;
+    }
+
     return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
@@ -504,10 +508,10 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
               ref={index === 0 ? firstCardRef : null}
               key={`${p.id}-${index}`}
               className={[
-                "relative h-[260px] w-[50%] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]",
+                "relative h-[260px] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]",
                 isVideo
-                  ? "md:w-[calc((100%_-_48px)/3.5)]"
-                  : "md:w-[calc((100%_-_32px)/3)]"
+                  ? "w-[50%] md:w-[calc((100%_-_48px)/3.5)]"
+                  : "w-[42%] md:w-[calc((100%_-_32px)/3)]"
               ].join(" ")}
             >
               {isVideo ? (

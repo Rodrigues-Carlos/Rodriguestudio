@@ -109,8 +109,6 @@ function App() {
   },
   {
     id: 3,
-<<<<<<< Updated upstream
-=======
     title: "Motion Hafele",
     type: "video",
     url: "conteudo/Motion%20Hafele.mp4",
@@ -118,7 +116,6 @@ function App() {
   },
   {
     id: 4,
->>>>>>> Stashed changes
     title: "DrifftCar",
     type: "video",
     thumb: "thumbs/drifft.png",
@@ -126,7 +123,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 4,
+    id: 5,
     title: "Se o pix sumisse?",
     type: "video",
     thumb: "thumbs/pix.png",
@@ -134,7 +131,7 @@ function App() {
     ratio: "aspect-[9/16]",
   },
   {
-    id: 5,
+    id: 6,
     title: "Telas Favretto",
     type: "video",
     thumb: "thumbs/clinica-cliente.png",
@@ -142,30 +139,18 @@ function App() {
     ratio: "aspect-square",
   },
   {
-    id: 6,
+    id: 7,
     title: "Melhor Sniper - Warzone",
     type: "video",
     url: "conteudo/melhorsniper.mp4",
     ratio: "aspect-video",
   },
   {
-    id: 7,
-    title: "Logo Cibersegurança",
-    type: "static",
-<<<<<<< Updated upstream
-    url: "conteudo/Ciberseglogo.jpg",
-    ratio: "aspect-[2.08/1]",
-  },
-  {
     id: 8,
-    title: "Post Octa + UNI",
+    title: "Flyer Octacore",
     type: "static",
-    url: "conteudo/UNI.png",
-    ratio: "aspect-[4/1]",
-=======
     url: "conteudo/Flyer%20Octacore.png",
     ratio: "aspect-[0.707/1]",
->>>>>>> Stashed changes
   },
   {
     id: 9,
@@ -176,13 +161,27 @@ function App() {
   },
   {
     id: 10,
+    title: "Logo Ciberseguranca",
+    type: "static",
+    url: "conteudo/Ciberseglogo.jpg",
+    ratio: "aspect-[2.08/1]",
+  },
+  {
+    id: 11,
+    title: "Post Octa + UNI",
+    type: "static",
+    url: "conteudo/UNI.png",
+    ratio: "aspect-[4/1]",
+  },
+  {
+    id: 12,
     title: "Flyer CyberCon",
     type: "static",
     url: "conteudo/Cybercon.png",
     ratio: "aspect-[0.707/1]",
   },
   {
-    id: 11,
+    id: 13,
     title: "Flyer Calouros",
     type: "static",
     url: "conteudo/procura-se.png",
@@ -408,15 +407,12 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   const firstCardRef = useRef(null);
 
   const isVideo = filter === "video";
-  const usePeekCarousel = isVideo || !isDesktopCarousel;
+  const isMobileVideoList = isVideo && !isDesktopCarousel;
+  const usePeekCarousel = !isMobileVideoList && (isVideo || !isDesktopCarousel);
   const carouselItems = useMemo(() => {
     if (!items.length) return [];
     return usePeekCarousel ? [items[items.length - 1], ...items, items[0]] : items;
   }, [items, usePeekCarousel]);
-<<<<<<< Updated upstream
-  const activeIndex = usePeekCarousel ? page + 1 : page;
-  const maxPage = isDesktopCarousel && !usePeekCarousel
-=======
   const mobileVideoItems = useMemo(() => {
     if (!isMobileVideoList || !items.length) return [];
     const start = page;
@@ -426,7 +422,6 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   const maxPage = isMobileVideoList
     ? Math.max(items.length - 1, 0)
     : isDesktopCarousel && !usePeekCarousel
->>>>>>> Stashed changes
     ? Math.max(items.length - 3, 0)
     : Math.max(items.length - 1, 0);
 
@@ -480,10 +475,6 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       return -activeIndex * step;
     }
 
-    if (!isVideo) {
-      return -activeIndex * step;
-    }
-
     return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
@@ -525,23 +516,13 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       </div>
 
       <div ref={viewportRef} className="relative overflow-hidden">
-        <div
-          ref={trackRef}
-          className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"
-          style={{ transform: `translateX(${carouselTranslate}px)` }}
-        >
-          {carouselItems.map((p, index) => (
-            <div
-              ref={index === 0 ? firstCardRef : null}
-              key={`${p.id}-${index}`}
-              className={[
-                "relative h-[260px] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]",
-                isVideo
-                  ? "w-[50%] md:w-[calc((100%_-_48px)/3.5)]"
-                  : "w-[42%] md:w-[calc((100%_-_32px)/3)]"
-              ].join(" ")}
-            >
-              {isVideo ? (
+        {isMobileVideoList ? (
+          <div className="grid gap-4">
+            {mobileVideoItems.map((p, index) => (
+              <div
+                key={`${p.id}-${index}`}
+                className="relative h-[240px] overflow-hidden rounded-2xl border border-white/10 bg-white/5"
+              >
                 <video
                   src={p.url}
                   poster={p.thumb}
@@ -550,17 +531,47 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                   preload="metadata"
                   className="absolute inset-0 h-full w-full object-contain"
                 />
-              ) : (
-                <img
-                  src={p.url}
-                  alt={p.title}
-                  className="absolute inset-0 h-full w-full cursor-zoom-in object-contain"
-                  onClick={() => setLightbox(p)}
-                />
-              )}
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            ref={trackRef}
+            className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"
+            style={{ transform: `translateX(${carouselTranslate}px)` }}
+          >
+            {carouselItems.map((p, index) => (
+              <div
+                ref={index === 0 ? firstCardRef : null}
+                key={`${p.id}-${index}`}
+                className={[
+                  "relative h-[260px] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]",
+                  isVideo
+                    ? "w-[50%] md:w-[calc((100%_-_48px)/3.5)]"
+                    : "w-[70%] md:w-[calc((100%_-_32px)/3)]"
+                ].join(" ")}
+              >
+                {isVideo ? (
+                  <video
+                    src={p.url}
+                    poster={p.thumb}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full object-contain"
+                  />
+                ) : (
+                  <img
+                    src={p.url}
+                    alt={p.title}
+                    className="absolute inset-0 h-full w-full cursor-zoom-in object-contain"
+                    onClick={() => setLightbox(p)}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
 
                 <button
           onClick={goPrevious}

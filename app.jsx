@@ -203,6 +203,7 @@ function App() {
       <Portfolio
         filter={filter}
         setFilter={setFilter}
+        allItems={projects}
         items={filtered}
         setLightbox={setLightbox}
       />
@@ -394,7 +395,7 @@ function Services() {
   );
 }
 
-function Portfolio({ filter, setFilter, items, setLightbox }) {
+function Portfolio({ filter, setFilter, allItems, items, setLightbox }) {
   const [page, setPage] = useState(0);
   const [isDesktopCarousel, setIsDesktopCarousel] = useState(false);
   const [carouselMetrics, setCarouselMetrics] = useState({
@@ -405,6 +406,11 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   const viewportRef = useRef(null);
   const trackRef = useRef(null);
   const firstCardRef = useRef(null);
+  const touchRef = useRef({
+    startX: 0,
+    startY: 0,
+    handled: false,
+  });
 
   const isVideo = filter === "video";
   const usePeekCarousel = isVideo || !isDesktopCarousel;
@@ -423,10 +429,6 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     : isVideo
     ? "50%"
     : "70%";
-
-  useEffect(() => {
-    setPage(0);
-  }, [filter]);
 
   useEffect(() => {
     setPage((p) => Math.min(p, maxPage));
@@ -477,12 +479,73 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
+  const getMaxPageForFilter = (targetFilter) => {
+    const targetItems = allItems.filter((p) => p.type === targetFilter);
+    const targetIsVideo = targetFilter === "video";
+    const targetUsePeekCarousel = targetIsVideo || !isDesktopCarousel;
+
+    if (isDesktopCarousel && !targetUsePeekCarousel) {
+      return Math.max(targetItems.length - 3, 0);
+    }
+
+    return Math.max(targetItems.length - 1, 0);
+  };
+
+  const getSiblingFilter = () => (filter === "video" ? "static" : "video");
+
+  const selectFilter = (nextFilter) => {
+    setPage(0);
+    setFilter(nextFilter);
+  };
+
   const goPrevious = () => {
-    setPage((p) => (p <= 0 ? maxPage : p - 1));
+    if (page <= 0) {
+      const previousFilter = getSiblingFilter();
+      setPage(getMaxPageForFilter(previousFilter));
+      setFilter(previousFilter);
+      return;
+    }
+
+    setPage((p) => p - 1);
   };
 
   const goNext = () => {
-    setPage((p) => (p >= maxPage ? 0 : p + 1));
+    if (page >= maxPage) {
+      setPage(0);
+      setFilter(getSiblingFilter());
+      return;
+    }
+
+    setPage((p) => p + 1);
+  };
+
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchRef.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      handled: false,
+    };
+  };
+
+  const handleTouchMove = (event) => {
+    const state = touchRef.current;
+    if (state.handled) return;
+
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - state.startX;
+    const deltaY = touch.clientY - state.startY;
+
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) {
+      return;
+    }
+
+    state.handled = true;
+    if (deltaX < 0) {
+      goNext();
+    } else {
+      goPrevious();
+    }
   };
 
   return (
@@ -500,7 +563,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
           return (
             <button
               key={t.key}
-              onClick={() => setFilter(t.key)}
+              onClick={() => selectFilter(t.key)}
               className={[
                 "rounded-full px-6 py-2 text-sm font-medium transition-all border",
                 active
@@ -514,7 +577,12 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
         })}
       </div>
 
-      <div ref={viewportRef} className="relative overflow-hidden">
+      <div
+        ref={viewportRef}
+        className="relative overflow-hidden touch-pan-y"
+        onTouchStartCapture={handleTouchStart}
+        onTouchMoveCapture={handleTouchMove}
+      >
           <div
             ref={trackRef}
             className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"

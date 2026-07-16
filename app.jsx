@@ -14,7 +14,25 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/edu-carlos/";
 
 function WhatsAppFAB() {
   const path = typeof location !== "undefined" ? location.pathname : "/";
-  if (WA_HIDE_ON?.some?.(p => p && path.startsWith(p))) return null;
+  const hideOnPath = WA_HIDE_ON?.some?.(p => p && path.startsWith(p));
+  const [hideAtPageEnd, setHideAtPageEnd] = React.useState(false);
+
+  React.useEffect(() => {
+    const updateVisibility = () => {
+      const page = document.documentElement;
+      const scrollBottom = window.scrollY + window.innerHeight;
+      const pageBottom = page.scrollHeight;
+      setHideAtPageEnd(pageBottom - scrollBottom < 180);
+    };
+
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
+  }, []);
 
   let baseMsg = WA_MSG;
   if (WA_INCLUDE_CTX === "path" || WA_INCLUDE_CTX === "path-title") {
@@ -43,6 +61,8 @@ function WhatsAppFAB() {
     return () => clearInterval(id);
   }, []);
 
+  if (hideOnPath) return null;
+
   const anchor = (
     <a
       href={href}
@@ -51,7 +71,13 @@ function WhatsAppFAB() {
       aria-label="Falar no WhatsApp"
       title="Abrir conversa no WhatsApp"
       style={bottomStyle}
-      className={`${mobileOnlyClass} fixed ${sideClass} z-[9999] group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 rounded-full pointer-events-auto`}
+      className={[
+        mobileOnlyClass,
+        "fixed",
+        sideClass,
+        "z-[9999] group focus:outline-none focus-visible:ring-2 focus-visible:ring-green-400 rounded-full transition-all duration-300",
+        hideAtPageEnd ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100 translate-y-0 pointer-events-auto"
+      ].join(" ")}
     >
       {/* Glow/Aura (fica dentro, não causa scroll) */}
       <span className="absolute inset-0 rounded-full blur-xl opacity-60 bg-green-500/40 group-hover:bg-green-400/50 transition" />

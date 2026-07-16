@@ -10,6 +10,7 @@ const WA_OFFSET_BOTTOM = parseInt(_cfg?.dataset.offsetBottom || "20", 10);
 const WA_HIDE_ON       = (_cfg?.dataset.hideOn || "").split(",").map(s => s.trim()).filter(Boolean);
 const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase();
 const WA_LABEL         = _cfg?.dataset.label || "Falar no WhatsApp";
+const LINKEDIN_URL = "https://www.linkedin.com/in/edu-carlos/";
 
 function WhatsAppFAB() {
   const path = typeof location !== "undefined" ? location.pathname : "/";
@@ -396,6 +397,8 @@ function Services() {
 
 function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
+  const [visualIndex, setVisualIndex] = useState(0);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [isDesktopCarousel, setIsDesktopCarousel] = useState(false);
   const [carouselMetrics, setCarouselMetrics] = useState({
     viewport: 0,
@@ -413,11 +416,22 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
   const isVideo = filter === "video";
   const usePeekCarousel = isVideo || !isDesktopCarousel;
+  const cloneCount = useMemo(() => {
+    if (!usePeekCarousel || !items.length) return 0;
+
+    const { viewport, card, gap } = carouselMetrics;
+    const measuredStep = card + gap;
+    const visibleCards = measuredStep > 0 ? Math.ceil(viewport / measuredStep) : 2;
+    return Math.min(items.length, Math.max(2, visibleCards + 1));
+  }, [carouselMetrics, items.length, usePeekCarousel]);
   const carouselItems = useMemo(() => {
     if (!items.length) return [];
-    return usePeekCarousel ? [items[items.length - 1], ...items, items[0]] : items;
-  }, [items, usePeekCarousel]);
-  const activeIndex = usePeekCarousel ? page + 1 : page;
+    if (!usePeekCarousel) return items;
+
+    const headClones = items.slice(-cloneCount);
+    const tailClones = items.slice(0, cloneCount);
+    return [...headClones, ...items, ...tailClones];
+  }, [cloneCount, items, usePeekCarousel]);
   const maxPage = isDesktopCarousel && !usePeekCarousel
     ? Math.max(items.length - 3, 0)
     : Math.max(items.length - 1, 0);
@@ -432,6 +446,17 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   useEffect(() => {
     setPage((p) => Math.min(p, maxPage));
   }, [maxPage]);
+
+  useEffect(() => {
+    setTransitionEnabled(false);
+    setVisualIndex(usePeekCarousel ? cloneCount + page : page);
+
+    const frame = requestAnimationFrame(() => {
+      setTransitionEnabled(true);
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [cloneCount, items.length, usePeekCarousel]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -468,14 +493,14 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
     const step = card + gap;
     if (isDesktopCarousel && isVideo) {
-      return -card / 2 - (activeIndex - 1) * step;
+      return -card / 2 - (visualIndex - cloneCount) * step;
     }
 
     if (isDesktopCarousel) {
-      return -activeIndex * step;
+      return -visualIndex * step;
     }
 
-    return viewport / 2 - card / 2 - activeIndex * step;
+    return viewport / 2 - card / 2 - visualIndex * step;
   })();
 
   const selectFilter = (nextFilter) => {
@@ -484,11 +509,45 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   };
 
   const goPrevious = () => {
-    setPage((p) => (p <= 0 ? maxPage : p - 1));
+    if (!items.length) return;
+
+    setTransitionEnabled(true);
+    if (usePeekCarousel && page <= 0) {
+      setPage(maxPage);
+      setVisualIndex(cloneCount - 1);
+      return;
+    }
+
+    const nextPage = page <= 0 ? maxPage : page - 1;
+    setPage(nextPage);
+    setVisualIndex(usePeekCarousel ? cloneCount + nextPage : nextPage);
   };
 
   const goNext = () => {
-    setPage((p) => (p >= maxPage ? 0 : p + 1));
+    if (!items.length) return;
+
+    setTransitionEnabled(true);
+    if (usePeekCarousel && page >= maxPage) {
+      setPage(0);
+      setVisualIndex(cloneCount + items.length);
+      return;
+    }
+
+    const nextPage = page >= maxPage ? 0 : page + 1;
+    setPage(nextPage);
+    setVisualIndex(usePeekCarousel ? cloneCount + nextPage : nextPage);
+  };
+
+  const handleTransitionEnd = (event) => {
+    if (event.target !== trackRef.current || !usePeekCarousel || !items.length) return;
+
+    if (visualIndex >= cloneCount + items.length) {
+      setTransitionEnabled(false);
+      setVisualIndex(cloneCount);
+    } else if (visualIndex < cloneCount) {
+      setTransitionEnabled(false);
+      setVisualIndex(cloneCount + items.length - 1);
+    }
   };
 
   const handleTouchStart = (event) => {
@@ -557,7 +616,11 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
       >
           <div
             ref={trackRef}
-            className="flex gap-4 transition-transform duration-500 ease-out will-change-transform"
+            onTransitionEnd={handleTransitionEnd}
+            className={[
+              "flex gap-4 will-change-transform",
+              transitionEnabled ? "transition-transform duration-500 ease-out" : ""
+            ].join(" ")}
             style={{ transform: `translateX(${carouselTranslate}px)` }}
           >
             {carouselItems.map((p, index) => (
@@ -708,14 +771,34 @@ function Contact() {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>
 
-          <a
-            href={`https://wa.me/${wa}?text=${msg}`}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-block rounded-xl px-8 py-4 font-semibold bg-red-600 hover:bg-red-500 transition-colors shadow-lg shadow-black/30"
-          >
-            Falar no WhatsApp
-          </a>
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href={`https://wa.me/${wa}?text=${msg}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-xl px-8 py-4 font-semibold bg-red-600 hover:bg-red-500 transition-colors shadow-lg shadow-black/30"
+            >
+              Falar no WhatsApp
+            </a>
+
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir LinkedIn de Carlos Eduardo"
+              title="LinkedIn"
+              className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-red-500/60 hover:text-white"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.42 8h4.15v15H.42V8Zm7.43 0h3.98v2.05h.06c.55-1.05 1.91-2.16 3.94-2.16C20.04 7.89 24 10.66 24 16.62V23h-4.15v-5.66c0-1.35-.02-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V23h-4.15V8H7.85Z" />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -734,6 +817,23 @@ function Footer() {
           <a href="#portfolio" className="hover:text-white/90">Portfólio</a>
           <a href="#sobre" className="hover:text-white/90">Sobre</a>
           <a href="#contato" className="hover:text-white/90">Contato</a>
+          <a
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-red-500/60 hover:text-white"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.42 8h4.15v15H.42V8Zm7.43 0h3.98v2.05h.06c.55-1.05 1.91-2.16 3.94-2.16C20.04 7.89 24 10.66 24 16.62V23h-4.15v-5.66c0-1.35-.02-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V23h-4.15V8H7.85Z" />
+            </svg>
+          </a>
         </div>
       </div>
     </footer>

@@ -203,7 +203,6 @@ function App() {
       <Portfolio
         filter={filter}
         setFilter={setFilter}
-        allItems={projects}
         items={filtered}
         setLightbox={setLightbox}
       />
@@ -395,7 +394,7 @@ function Services() {
   );
 }
 
-function Portfolio({ filter, setFilter, allItems, items, setLightbox }) {
+function Portfolio({ filter, setFilter, items, setLightbox }) {
   const [page, setPage] = useState(0);
   const [isDesktopCarousel, setIsDesktopCarousel] = useState(false);
   const [carouselMetrics, setCarouselMetrics] = useState({
@@ -479,44 +478,17 @@ function Portfolio({ filter, setFilter, allItems, items, setLightbox }) {
     return viewport / 2 - card / 2 - activeIndex * step;
   })();
 
-  const getMaxPageForFilter = (targetFilter) => {
-    const targetItems = allItems.filter((p) => p.type === targetFilter);
-    const targetIsVideo = targetFilter === "video";
-    const targetUsePeekCarousel = targetIsVideo || !isDesktopCarousel;
-
-    if (isDesktopCarousel && !targetUsePeekCarousel) {
-      return Math.max(targetItems.length - 3, 0);
-    }
-
-    return Math.max(targetItems.length - 1, 0);
-  };
-
-  const getSiblingFilter = () => (filter === "video" ? "static" : "video");
-
   const selectFilter = (nextFilter) => {
     setPage(0);
     setFilter(nextFilter);
   };
 
   const goPrevious = () => {
-    if (page <= 0) {
-      const previousFilter = getSiblingFilter();
-      setPage(getMaxPageForFilter(previousFilter));
-      setFilter(previousFilter);
-      return;
-    }
-
-    setPage((p) => p - 1);
+    setPage((p) => (p <= 0 ? maxPage : p - 1));
   };
 
   const goNext = () => {
-    if (page >= maxPage) {
-      setPage(0);
-      setFilter(getSiblingFilter());
-      return;
-    }
-
-    setPage((p) => p + 1);
+    setPage((p) => (p >= maxPage ? 0 : p + 1));
   };
 
   const handleTouchStart = (event) => {

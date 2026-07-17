@@ -138,6 +138,7 @@ function App() {
     id: 3,
     title: "Motion Hafele",
     type: "video",
+    thumb: "thumbs/Hafele.png",
     url: "conteudo/Motion Hafele.mp4",
     ratio: "aspect-video",
   },
@@ -169,6 +170,7 @@ function App() {
     id: 7,
     title: "Melhor Sniper - Warzone",
     type: "video",
+    thumb: "thumbs/capa-sniper.png",
     url: "conteudo/melhorsniper.mp4",
     ratio: "aspect-video",
   },
@@ -288,6 +290,25 @@ function Logo() {
         Rodrigues Films
       </span>
     </a>
+  );
+}
+
+function LinkedInIcon({ className = "h-5 w-5" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect width="24" height="24" rx="4" fill="currentColor" />
+      <circle cx="7.1" cy="7.25" r="1.7" fill="white" />
+      <path d="M5.65 10.1h2.9V18h-2.9v-7.9Z" fill="white" />
+      <path
+        d="M10.55 10.1h2.75v1.08c.48-.72 1.33-1.28 2.62-1.28 2.05 0 3.43 1.35 3.43 4.05V18h-2.9v-3.72c0-1.23-.48-1.86-1.46-1.86-.98 0-1.54.68-1.54 1.86V18h-2.9v-7.9Z"
+        fill="white"
+      />
+    </svg>
   );
 }
 
@@ -519,7 +540,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
 
     const step = card + gap;
     if (isDesktopCarousel && isVideo) {
-      return -card / 2 - (visualIndex - cloneCount) * step;
+      return -card / 2 - visualIndex * step;
     }
 
     if (isDesktopCarousel) {
@@ -813,16 +834,9 @@ function Contact() {
               rel="noopener noreferrer"
               aria-label="Abrir LinkedIn de Carlos Eduardo"
               title="LinkedIn"
-              className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-red-500/60 hover:text-white"
+              className="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-[#0A66C2] transition-colors hover:border-[#0A66C2]/70 hover:bg-white/10"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.42 8h4.15v15H.42V8Zm7.43 0h3.98v2.05h.06c.55-1.05 1.91-2.16 3.94-2.16C20.04 7.89 24 10.66 24 16.62V23h-4.15v-5.66c0-1.35-.02-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V23h-4.15V8H7.85Z" />
-              </svg>
+              <LinkedInIcon className="h-5 w-5" />
             </a>
           </div>
         </div>
@@ -849,16 +863,9 @@ function Footer() {
             rel="noopener noreferrer"
             aria-label="LinkedIn"
             title="LinkedIn"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/60 transition-colors hover:border-red-500/60 hover:text-white"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-[#0A66C2] transition-colors hover:border-[#0A66C2]/70 hover:bg-white/10"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.42 8h4.15v15H.42V8Zm7.43 0h3.98v2.05h.06c.55-1.05 1.91-2.16 3.94-2.16C20.04 7.89 24 10.66 24 16.62V23h-4.15v-5.66c0-1.35-.02-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V23h-4.15V8H7.85Z" />
-            </svg>
+            <LinkedInIcon className="h-4 w-4" />
           </a>
         </div>
       </div>

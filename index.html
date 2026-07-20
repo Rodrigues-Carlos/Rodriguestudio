@@ -19,7 +19,7 @@
       html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; background: #000; }
       body { overflow-x: hidden; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
       ::selection { background: #ef4444; color: #fff; }
-      .reveal { opacity: 0; transform: translateY(28px) scale(.985); transition: opacity .85s cubic-bezier(.22, 1, .36, 1), transform .85s cubic-bezier(.22, 1, .36, 1); }
+      .reveal { opacity: 0; transform: translateY(30px) scale(.988); transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .9s cubic-bezier(.22, 1, .36, 1); will-change: opacity, transform; }
       .reveal.is-visible { opacity: 1; transform: translateY(0) scale(1); }
       .hero-copy { animation: hero-enter 1s cubic-bezier(.22, 1, .36, 1) both; }
       .hero-video { transform: scale(1.04); animation: hero-breathe 14s ease-in-out infinite alternate; }

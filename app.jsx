@@ -263,12 +263,9 @@ function ScrollExperience() {
     const revealItems = document.querySelectorAll("[data-reveal]");
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
       }),
-      { threshold: 0.12, rootMargin: "0px 0px -6%" }
+      { threshold: 0.14, rootMargin: "-8% 0px -8%" }
     );
 
     if (reducedMotion) revealItems.forEach((item) => item.classList.add("is-visible"));
@@ -403,10 +400,6 @@ const msg = encodeURIComponent(
           </div>
         </div>
       </div>
-      <a href="#servicos" aria-label="Descer para serviços" className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[.28em] text-white/55 transition-colors hover:text-white md:flex">
-        Explore
-        <span className="h-8 w-px bg-gradient-to-b from-white/70 to-transparent" />
-      </a>
     </section>
   );
 }

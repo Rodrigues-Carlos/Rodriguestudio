@@ -225,6 +225,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
+      <ScrollExperience />
       <Header />
       <Hero />
       <BrandsStrip />
@@ -256,9 +257,56 @@ function App() {
   );
 }
 
+function ScrollExperience() {
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealItems = document.querySelectorAll("[data-reveal]");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.12, rootMargin: "0px 0px -6%" }
+    );
+
+    if (reducedMotion) revealItems.forEach((item) => item.classList.add("is-visible"));
+    else revealItems.forEach((item) => observer.observe(item));
+
+    let frame;
+    const updateProgress = () => {
+      frame = undefined;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
+      document.documentElement.style.setProperty("--scroll-progress", progress);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(updateProgress); };
+    updateProgress();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      observer.disconnect();
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+  return null;
+}
+
 function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 28);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/50 bg-black/70 border-b border-white/10">
+    <header className={`header-shell fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b ${scrolled ? "is-scrolled" : "bg-black/45 border-white/5"}`}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Logo />
         <nav className="hidden md:flex items-center gap-8 text-sm">
@@ -270,11 +318,12 @@ function Header() {
         </nav>
         <a
           href="#contato"
-          className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-500 transition-colors"
+          className="button-lift inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-500"
         >
           Orçar projeto
         </a>
       </div>
+      <div className="scroll-progress absolute bottom-0 left-0 h-px w-full bg-red-500" aria-hidden="true" />
     </header>
   );
 }
@@ -318,9 +367,9 @@ const msg = encodeURIComponent(
   "Olá, Carlos! Quero orçamento para um vídeo. Podemos conversar?"
 );
   return (
-    <section id="top" className="relative h-[92vh] w-full overflow-hidden">
+    <section id="top" className="relative h-[92vh] min-h-[620px] w-full overflow-hidden">
       <video
-        className="absolute inset-0 h-full w-full object-cover brightness-[0.45]"
+        className="hero-video absolute inset-0 h-full w-full object-cover brightness-[0.45]"
         src="https://www.w3schools.com/html/mov_bbb.mp4"
         autoPlay
         muted
@@ -329,7 +378,7 @@ const msg = encodeURIComponent(
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.6)_60%,rgba(0,0,0,0.9)_100%)]" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-center">
-        <div className="max-w-2xl">
+        <div className="hero-copy max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
             Cinema para empresas que querem <span className="text-red-500">resultado</span>.
           </h1>
@@ -339,7 +388,7 @@ const msg = encodeURIComponent(
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#portfolio"
-              className="rounded-full bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-red-500 hover:text-white transition-colors"
+              className="button-lift rounded-full bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-red-500 hover:text-white"
             >
               Ver portfólio
             </a>
@@ -347,13 +396,17 @@ const msg = encodeURIComponent(
               href={`https://wa.me/${wa}?text=${msg}`}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400 transition-colors"
+              className="button-lift rounded-full border border-white/20 px-5 py-3 text-sm font-semibold hover:border-red-500 hover:text-red-400"
             >
               Falar no WhatsApp
             </a>
           </div>
         </div>
       </div>
+      <a href="#servicos" aria-label="Descer para serviços" className="absolute bottom-7 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[.28em] text-white/55 transition-colors hover:text-white md:flex">
+        Explore
+        <span className="h-8 w-px bg-gradient-to-b from-white/70 to-transparent" />
+      </a>
     </section>
   );
 }
@@ -399,7 +452,7 @@ function Services() {
   ];
 
   return (
-    <section id="servicos" className="max-w-7xl mx-auto px-6 pt-20 pb-10">
+    <section id="servicos" data-reveal className="reveal max-w-7xl mx-auto px-6 pt-20 pb-10">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Serviços</h2>
         <a href="#contato" className="text-sm text-red-400 hover:text-red-300">Solicitar proposta →</a>
@@ -627,7 +680,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
   };
 
   return (
-    <section id="portfolio" className="max-w-7xl mx-auto px-6 pt-10 pb-20">
+    <section id="portfolio" data-reveal className="reveal max-w-7xl mx-auto px-6 pt-10 pb-20">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Portfólio</h2>
       </div>
@@ -751,7 +804,7 @@ function Testimonials() {
   ];
 
   return (
-    <section id="depoimentos" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="depoimentos" data-reveal className="reveal max-w-7xl mx-auto px-6 py-20">
       <div className="flex items-end justify-between gap-6 mb-10">
         <h2 className="text-3xl md:text-4xl font-bold">Depoimentos</h2>
       </div>
@@ -774,7 +827,7 @@ function Testimonials() {
 
 function About() {
   return (
-    <section id="sobre" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="sobre" data-reveal className="reveal max-w-7xl mx-auto px-6 py-20">
       <div className="grid lg:grid-cols-2 gap-10 items-center">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
@@ -813,7 +866,7 @@ function Contact() {
   );
 
   return (
-    <section id="contato" className="max-w-7xl mx-auto px-6 py-20">
+    <section id="contato" data-reveal className="reveal max-w-7xl mx-auto px-6 py-20">
       <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-10">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold">Vamos tirar sua ideia do papel?</h2>

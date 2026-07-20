@@ -194,7 +194,7 @@ function VideoPlayer({ project }) {
           step="0.1"
           onChange={seek}
           aria-label="Progresso do video"
-          className="mb-3 h-1 w-full cursor-pointer accent-red-500"
+          className="video-progress mb-3 h-1 w-full cursor-pointer"
         />
         <div className="flex items-center justify-between text-xs font-medium text-white">
           <div className="flex items-center gap-3">
@@ -612,6 +612,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     startY: 0,
     handled: false,
   });
+  const wheelRef = useRef(0);
 
   const isVideo = filter === "video";
   const usePeekCarousel = isVideo || !isDesktopCarousel;
@@ -778,6 +779,17 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
     }
   };
 
+  const handleWheel = (event) => {
+    const isHorizontalGesture = Math.abs(event.deltaX) > Math.abs(event.deltaY) && Math.abs(event.deltaX) > 12;
+    const now = Date.now();
+    if (!isHorizontalGesture || now - wheelRef.current < 420) return;
+
+    event.preventDefault();
+    wheelRef.current = now;
+    if (event.deltaX > 0) goNext();
+    else goPrevious();
+  };
+
   return (
     <section id="portfolio" data-reveal className="reveal max-w-7xl mx-auto px-6 pt-10 pb-20">
       <div className="flex items-end justify-between gap-6 mb-10">
@@ -812,6 +824,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
         className="relative overflow-hidden touch-pan-y"
         onTouchStartCapture={handleTouchStart}
         onTouchMoveCapture={handleTouchMove}
+        onWheel={handleWheel}
       >
           <div
             ref={trackRef}

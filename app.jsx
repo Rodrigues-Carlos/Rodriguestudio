@@ -127,6 +127,14 @@ function WhatsAppFAB() {
   return ReactDOM.createPortal(anchor, document.body);
 }
 
+function PlayIcon({ className = "h-5 w-5" }) {
+  return <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true"><path d="M8 5.3v13.4c0 .8.9 1.28 1.57.82l10.04-6.7a.99.99 0 0 0 0-1.64L9.57 4.48A.99.99 0 0 0 8 5.3Z" fill="currentColor" /></svg>;
+}
+
+function PauseIcon({ className = "h-5 w-5" }) {
+  return <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true"><rect x="6.5" y="5" width="3.8" height="14" rx="1.2" fill="currentColor" /><rect x="13.7" y="5" width="3.8" height="14" rx="1.2" fill="currentColor" /></svg>;
+}
+
 function VideoPlayer({ project }) {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -173,9 +181,9 @@ function VideoPlayer({ project }) {
         type="button"
         onClick={togglePlayback}
         aria-label={isPlaying ? "Pausar video" : "Reproduzir video"}
-        className={`absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/25 bg-black/55 text-xl text-white backdrop-blur-md transition-all duration-300 ${isPlaying ? "opacity-0 group-hover/player:opacity-100" : "opacity-100 hover:scale-105"}`}
+        className={`absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/25 bg-black/55 text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all duration-300 ${isPlaying ? "opacity-0 group-hover/player:opacity-100" : "opacity-100 hover:scale-105 hover:bg-red-500"}`}
       >
-        {isPlaying ? "Ⅱ" : "▶"}
+        {isPlaying ? <PauseIcon className="h-6 w-6" /> : <PlayIcon className="ml-1 h-6 w-6" />}
       </button>
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-4 pb-4 pt-12 opacity-100 transition-opacity md:opacity-0 md:group-hover/player:opacity-100">
         <input
@@ -190,7 +198,7 @@ function VideoPlayer({ project }) {
         />
         <div className="flex items-center justify-between text-xs font-medium text-white">
           <div className="flex items-center gap-3">
-            <button type="button" onClick={togglePlayback} className="transition-colors hover:text-red-400" aria-label={isPlaying ? "Pausar video" : "Reproduzir video"}>{isPlaying ? "Pausar" : "Reproduzir"}</button>
+            <button type="button" onClick={togglePlayback} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/10 transition-colors hover:border-red-500 hover:bg-red-500" aria-label={isPlaying ? "Pausar video" : "Reproduzir video"}>{isPlaying ? <PauseIcon className="h-3.5 w-3.5" /> : <PlayIcon className="ml-0.5 h-3.5 w-3.5" />}</button>
             <button type="button" onClick={() => { const video = videoRef.current; if (video) { video.muted = !video.muted; setMuted(video.muted); } }} className="transition-colors hover:text-red-400" aria-label={muted ? "Ativar som" : "Silenciar video"}>{muted ? "Sem som" : "Som"}</button>
           </div>
           <button type="button" onClick={toggleFullscreen} className="transition-colors hover:text-red-400" aria-label="Tela cheia">Tela cheia</button>
@@ -839,7 +847,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                   <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-[10px] font-medium uppercase tracking-[.16em] text-white/90 backdrop-blur-md">
                     {isVideo ? "Video" : "Estatico"}
                   </span>
-                  {isVideo && <span className="absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/45 pl-0.5 text-sm text-white backdrop-blur-md">▶</span>}
+                  {isVideo && <span className="absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white backdrop-blur-md"><PlayIcon className="ml-0.5 h-4 w-4" /></span>}
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <h3 className="text-lg font-semibold tracking-tight text-white">{p.title}</h3>

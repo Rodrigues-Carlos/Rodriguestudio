@@ -11,6 +11,21 @@ const WA_HIDE_ON       = (_cfg?.dataset.hideOn || "").split(",").map(s => s.trim
 const WA_INCLUDE_CTX   = (_cfg?.dataset.includeContext || "").toLowerCase();
 const WA_LABEL         = _cfg?.dataset.label || "Falar no WhatsApp";
 const LINKEDIN_URL = "https://www.linkedin.com/in/edu-carlos/";
+const PROJECT_DESCRIPTIONS = {
+  1: "Filme de produto com ritmo e acabamento para destacar presença e desejo pela marca.",
+  2: "Criativo vertical pensado para transformar interesse em interação no universo da estética.",
+  3: "Motion design que organiza informação e reforça valor de produto em poucos segundos.",
+  4: "Edição dinâmica para gerar retenção e energia em conteúdo automotivo.",
+  5: "Narrativa curta criada para interromper o scroll e abrir conversa com o público.",
+  6: "Peça social com mensagem direta, construída para engajamento e reconhecimento local.",
+  7: "Conteúdo gamer com ritmo, identidade e cortes que sustentam atenção até o fim.",
+  8: "Flyer de campanha com hierarquia visual para comunicar e mobilizar a comunidade.",
+  9: "Post de marca criado para transformar uma mensagem técnica em leitura imediata.",
+  10: "Identidade visual que traduz segurança, clareza e confiança para o digital.",
+  11: "Arte de parceria com presença visual para ampliar alcance entre comunidades.",
+  12: "Peça promocional com informação objetiva e impacto para divulgação de evento.",
+  13: "Flyer de atração com linguagem jovem, contraste forte e chamada para ação.",
+};
 
 function WhatsAppFAB() {
   const path = typeof location !== "undefined" ? location.pathname : "/";
@@ -216,7 +231,7 @@ function App() {
     url: "conteudo/procura-se.png",
     ratio: "aspect-[0.707/1]",
   },
-], []);
+].map((project) => ({ ...project, description: PROJECT_DESCRIPTIONS[project.id] })), []);
 
   const filtered = useMemo(
   () => projects.filter((p) => p.type === filter),
@@ -246,11 +261,11 @@ function App() {
     className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out"
     onClick={() => setLightbox(null)}
   >
-    <img
-      src={lightbox.url}
-      alt={lightbox.title}
-      className="max-w-[95vw] max-h-[90vh] object-contain"
-    />
+    {lightbox.type === "video" ? (
+      <video src={lightbox.url} poster={lightbox.thumb} controls autoPlay playsInline onClick={(event) => event.stopPropagation()} className="max-w-[95vw] max-h-[90vh] object-contain" />
+    ) : (
+      <img src={lightbox.url} alt={lightbox.title} onClick={(event) => event.stopPropagation()} className="max-w-[95vw] max-h-[90vh] object-contain" />
+    )}
   </div>
 )}
     </div>
@@ -425,22 +440,22 @@ function Services() {
       icon: "🎬",
       title: "Produção Institucional",
       desc:
-        "Roteiro, gravação e direção de cenas com estética cinematográfica para vídeos institucionais e corporativos.",
-      bullets: ["Planejamento criativo", "Captação em alta resolução", "Entrega color grade"],
+        "Vídeos que posicionam sua marca, traduzem valor e ajudam decisões de compra acontecerem.",
+      bullets: ["Narrativa orientada a resultado", "Captação com padrão cinematográfico", "Imagem que reforça confiança"],
     },
     {
       icon: "✂️",
       title: "Edição Criativa",
       desc:
-        "Montagem ágil, narrativa envolvente e motion sutil para campanhas e anúncios que convertem.",
-      bullets: ["Ritmo certo para cada plataforma", "Design de som", "Legendas e cortes dinâmicos"],
+        "Campanhas que geram engajamento com ritmo, clareza e uma ideia que fica na memória.",
+      bullets: ["Atenção nos primeiros segundos", "Design de som que cria impacto", "Cortes pensados para conversão"],
     },
     {
       icon: "📱",
       title: "Social Media Audiovisual",
       desc:
-        "Calendário de vídeos, formatos verticais e séries com identidade para crescer nas redes.",
-      bullets: ["Reels/TikTok/Shorts", "Templates consistentes", "Relatórios de desempenho"],
+        "Conteúdo com identidade e performance para sua marca ser reconhecida no feed e lembrada depois.",
+      bullets: ["Formatos que respeitam cada plataforma", "Identidade visual consistente", "Conteúdo feito para gerar conversa"],
     },
   ];
 
@@ -717,30 +732,38 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
             style={{ transform: `translateX(${carouselTranslate}px)` }}
           >
             {carouselItems.map((p, index) => (
-              <div
+              <article
                 ref={index === 0 ? firstCardRef : null}
                 key={`${p.id}-${index}`}
                 style={{ width: cardWidth }}
-                className="relative h-[260px] flex-none overflow-hidden rounded-2xl border border-white/10 bg-white/5 md:h-[340px]"
+                className="group flex flex-none flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition-all duration-500 hover:-translate-y-1 hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10"
               >
-                {isVideo ? (
-                  <video
-                    src={p.url}
-                    poster={p.thumb}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="absolute inset-0 h-full w-full object-contain"
-                  />
-                ) : (
+                <div className="relative h-48 overflow-hidden bg-black md:h-56">
                   <img
-                    src={p.url}
+                    src={isVideo ? p.thumb : p.url}
                     alt={p.title}
-                    className="absolute inset-0 h-full w-full cursor-zoom-in object-contain"
-                    onClick={() => setLightbox(p)}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
                   />
-                )}
-              </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-[10px] font-medium uppercase tracking-[.16em] text-white/90 backdrop-blur-md">
+                    {isVideo ? "Video" : "Estatico"}
+                  </span>
+                  {isVideo && <span className="absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/45 pl-0.5 text-sm text-white backdrop-blur-md">▶</span>}
+                </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="text-lg font-semibold tracking-tight text-white">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/65">{p.description}</p>
+                  <button
+                    type="button"
+                    onClick={() => setLightbox(p)}
+                    className="button-lift mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white transition-colors hover:border-red-500 hover:bg-red-500"
+                  >
+                    {isVideo ? "Ver video" : "Abrir peca"}
+                    <span aria-hidden="true">↗</span>
+                  </button>
+                </div>
+              </article>
             ))}
           </div>
 
@@ -752,6 +775,7 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                     backdrop-blur-md
                     rounded-full w-11 h-11 flex items-center justify-center
                     transition-all shadow-lg shadow-red-500/20"
+          aria-label="Projeto anterior"
         >
           ‹
         </button>
@@ -765,10 +789,27 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                     backdrop-blur-md
                     rounded-full w-11 h-11 flex items-center justify-center
                     transition-all shadow-lg shadow-red-500/20"
+          aria-label="Proximo projeto"
         >
           ›
         </button>
 
+      </div>
+      <div className="mt-6 flex items-center justify-center gap-2" aria-label="Navegacao do portfolio">
+        {items.map((item, index) => (
+          <button
+            key={item.id}
+            type="button"
+            aria-label={`Ir para ${item.title}`}
+            aria-current={index === page ? "true" : undefined}
+            onClick={() => {
+              setTransitionEnabled(true);
+              setPage(index);
+              setVisualIndex(usePeekCarousel ? cloneCount + index : index);
+            }}
+            className={`h-1.5 rounded-full transition-all duration-300 ${index === page ? "w-7 bg-red-500" : "w-1.5 bg-white/25 hover:bg-white/60"}`}
+          />
+        ))}
       </div>
     </section>
   );
@@ -780,7 +821,7 @@ function Testimonials() {
       name: "Leo Ritchie",
       role: "Youtuber - Estafera",
       text:
-        "Grande Carlão, melhorou a qualidade dos meus vídeos e trouxe mais engajamento no meu canal. Esse cara é nota 10!",
+        "A edição elevou a qualidade dos vídeos e trouxe mais engajamento para o canal, sem perder a identidade do conteúdo.",
     },
     {
       name: "Investmoney",
@@ -792,7 +833,7 @@ function Testimonials() {
       name: "Gabriela - Fundadora Octacore",
       role: "Octacore - AAACPUCPR",
       text:
-        "Gestor impecável, sempre realizou entregas dentro do prazo e com alta qualidade. Vestiu a camisa da atlética e elevou o nível da propaganda.",
+        "Entregas dentro do prazo e alta qualidade que elevaram o nível da comunicação e da propaganda da atlética.",
     },
   ];
 
@@ -825,14 +866,14 @@ function About() {
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">Sobre o estúdio</h2>
           <p className="mt-4 text-white/80">
-            Rodrigues Films é dirigido por <span className="text-white">Carlos Eduardo Rodrigues</span>, produtor e editor com 3 anos de experiência
-            em edição de vídeos. Meu foco é unir estética, estratégia e performance.
+            A Rodrigues Films é dirigida por <span className="text-white">Carlos Eduardo Rodrigues</span>: produção visual para marcas de estética, startups e redes sociais
+            que precisam transformar atenção em percepção de valor. São 3 anos de edição com olhar cinematográfico, unindo estética, estratégia e performance.
           </p>
           <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-white/70">
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Captação e edição alta resolução</li>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Motion e color grading</li>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Formatos para redes</li>
-            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Roteiro e direção</li>
+            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Visual que valoriza marcas</li>
+            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Motion e color grading estratégico</li>
+            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Conteúdo nativo para redes</li>
+            <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-red-500"/> Roteiro com foco em resposta</li>
           </ul>
         </div>
         <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-white/5">

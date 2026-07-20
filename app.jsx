@@ -127,6 +127,100 @@ function WhatsAppFAB() {
   return ReactDOM.createPortal(anchor, document.body);
 }
 
+function VideoPlayer({ project }) {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play();
+    else video.pause();
+  };
+
+  const seek = (event) => {
+    const video = videoRef.current;
+    const nextTime = Number(event.target.value);
+    if (video && Number.isFinite(nextTime)) video.currentTime = nextTime;
+  };
+
+  const toggleFullscreen = () => {
+    const player = videoRef.current?.parentElement;
+    if (!player) return;
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else player.requestFullscreen?.();
+  };
+
+  return (
+    <div className="group/player relative w-full overflow-hidden rounded-2xl bg-black shadow-2xl shadow-black/60">
+      <video
+        ref={videoRef}
+        src={project.url}
+        poster={project.thumb}
+        playsInline
+        preload="metadata"
+        className="max-h-[74vh] w-full object-contain"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => setIsPlaying(false)}
+        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration || 0)}
+        onTimeUpdate={(event) => setProgress(event.currentTarget.currentTime)}
+      />
+      <button
+        type="button"
+        onClick={togglePlayback}
+        aria-label={isPlaying ? "Pausar video" : "Reproduzir video"}
+        className={`absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/25 bg-black/55 text-xl text-white backdrop-blur-md transition-all duration-300 ${isPlaying ? "opacity-0 group-hover/player:opacity-100" : "opacity-100 hover:scale-105"}`}
+      >
+        {isPlaying ? "Ⅱ" : "▶"}
+      </button>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent px-4 pb-4 pt-12 opacity-100 transition-opacity md:opacity-0 md:group-hover/player:opacity-100">
+        <input
+          type="range"
+          min="0"
+          max={duration || 0}
+          value={progress}
+          step="0.1"
+          onChange={seek}
+          aria-label="Progresso do video"
+          className="mb-3 h-1 w-full cursor-pointer accent-red-500"
+        />
+        <div className="flex items-center justify-between text-xs font-medium text-white">
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={togglePlayback} className="transition-colors hover:text-red-400" aria-label={isPlaying ? "Pausar video" : "Reproduzir video"}>{isPlaying ? "Pausar" : "Reproduzir"}</button>
+            <button type="button" onClick={() => { const video = videoRef.current; if (video) { video.muted = !video.muted; setMuted(video.muted); } }} className="transition-colors hover:text-red-400" aria-label={muted ? "Ativar som" : "Silenciar video"}>{muted ? "Sem som" : "Som"}</button>
+          </div>
+          <button type="button" onClick={toggleFullscreen} className="transition-colors hover:text-red-400" aria-label="Tela cheia">Tela cheia</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectLightbox({ project, onClose }) {
+  useEffect(() => {
+    const onKeyDown = (event) => { if (event.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }} role="dialog" aria-modal="true" aria-label={project.title}>
+      <div className="relative w-full max-w-6xl">
+        <button type="button" onClick={onClose} aria-label="Fechar visualizacao" className="absolute -top-12 right-0 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-lg text-white transition-colors hover:bg-red-500">×</button>
+        {project.type === "video" ? <VideoPlayer project={project} /> : <img src={project.url} alt={project.title} className="max-h-[82vh] w-full rounded-2xl object-contain" />}
+        <div className="mt-4 flex items-start justify-between gap-4">
+          <div><p className="text-xs uppercase tracking-[.18em] text-red-400">{project.type === "video" ? "Video" : "Peca estatica"}</p><h2 className="mt-1 text-xl font-semibold text-white">{project.title}</h2></div>
+          <p className="max-w-md text-right text-sm leading-6 text-white/60">{project.description}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [lightbox, setLightbox] = useState(null);
   const [filter, setFilter] = useState("video");
@@ -256,18 +350,7 @@ function App() {
       <Contact />
       <Footer />
       <WhatsAppFAB />
-      {lightbox && (
-  <div
-    className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center cursor-zoom-out"
-    onClick={() => setLightbox(null)}
-  >
-    {lightbox.type === "video" ? (
-      <video src={lightbox.url} poster={lightbox.thumb} controls autoPlay playsInline onClick={(event) => event.stopPropagation()} className="max-w-[95vw] max-h-[90vh] object-contain" />
-    ) : (
-      <img src={lightbox.url} alt={lightbox.title} onClick={(event) => event.stopPropagation()} className="max-w-[95vw] max-h-[90vh] object-contain" />
-    )}
-  </div>
-)}
+      {lightbox && <ProjectLightbox project={lightbox} onClose={() => setLightbox(null)} />}
     </div>
   );
 }
@@ -738,7 +821,14 @@ function Portfolio({ filter, setFilter, items, setLightbox }) {
                 style={{ width: cardWidth }}
                 className="group flex flex-none flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition-all duration-500 hover:-translate-y-1 hover:border-red-500/50 hover:shadow-2xl hover:shadow-red-500/10"
               >
-                <div className="relative h-48 overflow-hidden bg-black md:h-56">
+                <div
+                  role="button"
+                  tabIndex="0"
+                  onClick={() => setLightbox(p)}
+                  onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setLightbox(p); } }}
+                  aria-label={`Abrir ${p.title}`}
+                  className="relative h-48 cursor-pointer overflow-hidden bg-black md:h-56"
+                >
                   <img
                     src={isVideo ? p.thumb : p.url}
                     alt={p.title}
